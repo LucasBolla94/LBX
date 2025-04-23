@@ -1,0 +1,307 @@
+{
+  "address": "GKkSnJqa84taHMC7CA1h4ZeZYaeaGkMydczVHcpqjpqi",
+  "metadata": {
+    "name": "miner_game",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "cash_out",
+      "discriminator": [
+        1,
+        110,
+        57,
+        58,
+        159,
+        157,
+        243,
+        192
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "reveal",
+      "discriminator": [
+        9,
+        35,
+        59,
+        190,
+        167,
+        249,
+        76,
+        115
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "start_game",
+      "discriminator": [
+        249,
+        47,
+        252,
+        172,
+        184,
+        162,
+        245,
+        14
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "withdraw_profit",
+      "discriminator": [
+        246,
+        31,
+        231,
+        85,
+        253,
+        136,
+        120,
+        168
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "address": "8BcbWvQmCGgP2faScqtyxPDcQ9mTXH9bgAExv4vZPZXV"
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "GameState",
+      "discriminator": [
+        144,
+        94,
+        208,
+        172,
+        248,
+        99,
+        134,
+        120
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "AlreadyLost",
+      "msg": "You already hit a bomb!"
+    },
+    {
+      "code": 6001,
+      "name": "AlreadyRevealed",
+      "msg": "You already revealed this index"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidIndex",
+      "msg": "Invalid index"
+    },
+    {
+      "code": 6003,
+      "name": "CashOutTooEarly",
+      "msg": "You cannot cash out yet"
+    },
+    {
+      "code": 6004,
+      "name": "NothingToCashOut",
+      "msg": "Nothing to cash out"
+    }
+  ],
+  "types": [
+    {
+      "name": "GameState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "earned",
+            "type": "u64"
+          },
+          {
+            "name": "is_dead",
+            "type": "bool"
+          },
+          {
+            "name": "revealed",
+            "type": {
+              "array": [
+                "bool",
+                25
+              ]
+            }
+          },
+          {
+            "name": "grid",
+            "type": {
+              "array": [
+                "u8",
+                25
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
