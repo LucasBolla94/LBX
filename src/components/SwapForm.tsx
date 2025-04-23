@@ -1,17 +1,22 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { VersionedTransaction } from '@solana/web3.js';
 
 const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 const LBX_MINT = 'LBX3EEwzxu2mbj7n5Mm3rjXoA4dQbaNX6YnQXPV6CAe';
 
+type QuoteResponse = {
+  outAmount: string;
+  // Você pode adicionar mais campos conforme necessidade
+};
+
 export default function SwapForm() {
   const [fromToken, setFromToken] = useState<'USDC' | 'LBX'>('USDC');
   const [toToken, setToToken] = useState<'LBX' | 'USDC'>('LBX');
   const [amount, setAmount] = useState('');
-  const [quote, setQuote] = useState<any>(null);
+  const [quote, setQuote] = useState<QuoteResponse | null>(null);
   const [quoteAmount, setQuoteAmount] = useState<string>('0.00');
   const [loading, setLoading] = useState(false);
   const { publicKey, signTransaction } = useWallet();
@@ -20,12 +25,12 @@ export default function SwapForm() {
   const inputMint = fromToken === 'USDC' ? USDC_MINT : LBX_MINT;
   const outputMint = toToken === 'LBX' ? LBX_MINT : USDC_MINT;
 
-  const fetchQuote = async () => {
+  const fetchQuote = useCallback(async () => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) return;
 
     try {
       setLoading(true);
-      const rawAmount = Math.floor(Number(amount) * 10 ** 6); // assume USDC input
+      const rawAmount = Math.floor(Number(amount) * 10 ** 6); // Assume USDC ou LBX com 6 decimais
       const url = `https://lite-api.jup.ag/swap/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${rawAmount}&slippageBps=50&restrictIntermediateTokens=true`;
       const response = await fetch(url);
       const data = await response.json();
@@ -42,11 +47,11 @@ export default function SwapForm() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [amount, inputMint, outputMint, toToken]);
 
   useEffect(() => {
     fetchQuote();
-  }, [amount, fromToken, toToken]);
+  }, [fetchQuote]);
 
   const handleSwap = () => {
     const f = fromToken;
@@ -63,7 +68,7 @@ export default function SwapForm() {
 
     try {
       setLoading(true);
-      await fetchQuote(); // ⚠️ Revalida quote para evitar expiração
+      await fetchQuote(); // Atualiza cotação
 
       if (!quote) return alert('Falha ao gerar a cotação atualizada.');
 
@@ -87,10 +92,7 @@ export default function SwapForm() {
       }
 
       const swapData = await response.json();
-
-      const transaction = VersionedTransaction.deserialize(
-        Buffer.from(swapData.swapTransaction, 'base64')
-      );
+      const transaction = VersionedTransaction.deserialize(Buffer.from(swapData.swapTransaction, 'base64'));
 
       const signedTx = await signTransaction(transaction);
       const txid = await connection.sendRawTransaction(signedTx.serialize(), {
@@ -105,9 +107,14 @@ export default function SwapForm() {
       } else {
         alert(`✅ Swap realizado com sucesso!\n🔗 https://solscan.io/tx/${txid}`);
       }
-    } catch (error: any) {
-      console.error('Erro ao executar swap:', error);
-      alert(error.message || 'Erro inesperado ao executar swap.');
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Erro ao executar swap:', error);
+        alert(error.message || 'Erro inesperado ao executar swap.');
+      } else {
+        console.error('Erro desconhecido ao executar swap:', error);
+        alert('Erro inesperado.');
+      }
     } finally {
       setLoading(false);
     }
