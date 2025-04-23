@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Koala NapReserv",
-  description: "A fun and powerful meme coin community built on Solana blockchain.",  
+  title: "LBX Group",
+  description: "A powerful community built on Solana blockchain.",  
 };
 
 export default function RootLayout({
