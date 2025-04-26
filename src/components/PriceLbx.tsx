@@ -60,7 +60,7 @@ export default function PriceLbx() {
             <p className="text-red-600 font-semibold text-base">Erro ao carregar</p>
           ) : price !== null ? (
             <p className="text-3xl font-bold text-green-600 tracking-tight">
-              ${price.toFixed(4)}
+              ${price.toFixed(6)}
             </p>
           ) : (
             <p className="text-base text-gray-400 italic">Carregando...</p>
