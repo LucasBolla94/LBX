@@ -4,7 +4,6 @@ import React from 'react';
 import IntroSection from '@/components/IntroSection';
 import StatsSection from '@/components/StatsSection';
 import SwapForm from '@/components/SwapForm';
-import WalletButton from '@/components/WalletButton'; // aqui está o componente dinâmico seguro
 import PriceLbx from '@/components/PriceLbx';
 
 export default function Home() {
