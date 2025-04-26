@@ -10,16 +10,16 @@ export default function IntroSection() {
           Renda real com o token LBX
         </h1>
         <p className="text-lg text-gray-700 mt-6">
-          O LBX Group transforma USDC em oportunidades: gere rendimento, participe de decisões e tenha liquidez real em um ecossistema sustentável.
+        LBX Group transforms USDC into opportunities: generate yield, participate in decision-making, and enjoy real liquidity within a sustainable ecosystem.
         </p>
         <div className="mt-8 flex gap-4">
           <a
-            href="https://app.streamflow.finance"
+            href="https://app.streamflow.finance/staking/solana/mainnet/E24fr7a6DySmvmnDiVfuNUGM1rBqHrXLMxdkHU8HuiSC"
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 bg-green-600 text-white rounded-full font-semibold hover:bg-green-700 transition"
           >
-            Stakar LBX
+            Stake
           </a>
         </div>
       </div>
