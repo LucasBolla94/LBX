@@ -64,7 +64,7 @@ export default function DashboardAccessButton() {
   }, [wallet.publicKey, wallet.connected]);
 
   if (loading) {
-    return <div className="text-center text-sm text-gray-500">Checking Balance...</div>;
+    return <div className="text-center text-sm text-gray-500">Connect for DashBoard</div>;
   }
 
   if (!wallet.connected) {
