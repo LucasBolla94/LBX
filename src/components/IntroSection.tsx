@@ -5,9 +5,9 @@ export default function IntroSection() {
   return (
     <section className="flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16 bg-white">
       <div className="max-w-xl">
-        <p className="uppercase text-sm tracking-widest text-green-700 font-semibold">Financeiro Descentralizado</p>
+        <p className="uppercase text-sm tracking-widest text-green-700 font-semibold">Decentralized Finance</p>
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4">
-          Renda real com o token LBX
+        LBXO: Scarce and Programmed to Generate Real Value.
         </h1>
         <p className="text-lg text-gray-700 mt-6">
         LBX Group transforms USDC into opportunities: generate yield, participate in decision-making, and enjoy real liquidity within a sustainable ecosystem.
