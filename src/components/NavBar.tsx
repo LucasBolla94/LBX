@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import WalletButton from './WalletButton';
+import DashboardAccessButton from './DashboardAccessButton';
 
 export default function NavBar() {
   return (
@@ -10,7 +11,7 @@ export default function NavBar() {
       <div className="space-x-4 text-sm">
         <Link href="/" className="hover:text-primary transition">Home</Link>
         <Link href="/whitepaper" className="hover:text-primary transition">Whitepaper</Link>
-        <Link href="/dashboard" className="hover:text-primary transition">Dashboard</Link>
+        <DashboardAccessButton />
       </div>
       <div>
         <WalletButton />
