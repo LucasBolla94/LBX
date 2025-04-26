@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { getAssociatedTokenAddress, getAccount, getMint } from '@solana/spl-token';
 import { useRouter } from 'next/navigation';
 
 const MINT_LBXO = new PublicKey('CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1');
@@ -13,52 +12,78 @@ export default function DashboardAccessButton() {
   const wallet = useWallet();
   const router = useRouter();
 
-  const [balance, setBalance] = useState<bigint>(0n);
-  const [decimals, setDecimals] = useState<number>(6);
+  const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const checkTokenBalance = async () => {
+    const checkLBXOBalance = async () => {
       if (!wallet.publicKey) return;
 
       setLoading(true);
-      const connection = new Connection(RPC);
-      const ata = await getAssociatedTokenAddress(MINT_LBXO, wallet.publicKey, true);
 
       try {
-        const account = await getAccount(connection, ata);
-        const mintInfo = await getMint(connection, MINT_LBXO);
+        const response = await fetch(RPC, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'getTokenAccountsByOwner',
+            params: [
+              wallet.publicKey.toBase58(),
+              { mint: MINT_LBXO.toBase58() },
+              { encoding: "jsonParsed" }
+            ],
+          }),
+        });
 
-        setBalance(account.amount);
-        setDecimals(mintInfo.decimals);
+        const data = await response.json();
+
+        if (data.result && data.result.value.length > 0) {
+          const tokenAccount = data.result.value[0];
+          const uiAmount = tokenAccount.account.data.parsed.info.tokenAmount.uiAmount;
+          console.log(`LBXO Balance detected: ${uiAmount}`);
+          setBalance(uiAmount);
+        } else {
+          console.log('No LBXO token account found for wallet.');
+          setBalance(0);
+        }
       } catch (error) {
         console.error('Error fetching LBXO balance:', error);
-        setBalance(0n);
+        setBalance(0);
       } finally {
         setLoading(false);
       }
     };
 
     if (wallet.connected) {
-      checkTokenBalance();
+      checkLBXOBalance();
     }
   }, [wallet.publicKey, wallet.connected]);
 
-  const formattedBalance = Number(balance) / Math.pow(10, decimals);
-  const hasMinimumLBXO = balance >= BigInt(500_000 * Math.pow(10, decimals) / 1_000_000);
+  if (loading) {
+    return <div className="text-center text-sm text-gray-500">Checking Balance...</div>;
+  }
 
-  if (!wallet.connected || loading) {
+  if (!wallet.connected) {
     return null;
   }
 
-  if (!hasMinimumLBXO) {
-    return null;
+  if (balance < 500_000) {
+    return (
+      <div className="flex items-center text-gray-500 text-sm space-x-1">
+        <span>Need 500k LBXO to DashBoard</span>
+        <span className="text-lg">❓</span>
+      </div>
+    );
   }
 
   return (
     <button
       onClick={() => router.push('/dashboard')}
-      className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out shadow-lg hover:scale-105"
+      className="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out shadow-lg hover:scale-105"
     >
       🔐 Access Dashboard
     </button>
