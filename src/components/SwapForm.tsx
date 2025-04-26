@@ -12,8 +12,8 @@ type QuoteResponse = {
 };
 
 export default function SwapForm() {
-  const [fromToken, setFromToken] = useState<'USDC' | 'LBX'>('USDC');
-  const [toToken, setToToken] = useState<'LBX' | 'USDC'>('LBX');
+  const [fromToken, setFromToken] = useState<'USDC' | 'LBXO'>('USDC');
+  const [toToken, setToToken] = useState<'LBXO' | 'USDC'>('LBXO');
   const [amount, setAmount] = useState('');
   const [quote, setQuote] = useState<QuoteResponse | null>(null);
   const [quoteAmount, setQuoteAmount] = useState<string>('0.00');
@@ -26,7 +26,7 @@ export default function SwapForm() {
   const { connection } = useConnection();
 
   const inputMint = fromToken === 'USDC' ? USDC_MINT : LBX_MINT;
-  const outputMint = toToken === 'LBX' ? LBX_MINT : USDC_MINT;
+  const outputMint = toToken === 'LBXO' ? LBX_MINT : USDC_MINT;
 
   const fetchQuote = useCallback(async () => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) return;
@@ -37,7 +37,7 @@ export default function SwapForm() {
       const response = await fetch(url);
       const data = await response.json();
 
-      const decimals = toToken === 'LBX' ? 9 : 6;
+      const decimals = toToken === 'LBXO' ? 9 : 6;
       const outAmount = Number(data.outAmount) / 10 ** decimals;
 
       setQuoteAmount(outAmount.toFixed(4));
@@ -56,8 +56,8 @@ export default function SwapForm() {
   }, [fetchQuote]);
 
   const handleSwap = () => {
-    setFromToken((prev) => (prev === 'USDC' ? 'LBX' : 'USDC'));
-    setToToken((prev) => (prev === 'LBX' ? 'USDC' : 'LBX'));
+    setFromToken((prev) => (prev === 'USDC' ? 'LBXO' : 'USDC'));
+    setToToken((prev) => (prev === 'LBXO' ? 'USDC' : 'LBXO'));
     setAmount('');
     setQuote(null);
     setQuoteAmount('0.00');
@@ -140,7 +140,7 @@ export default function SwapForm() {
       {isProcessing && (
         <div className="fixed inset-0 z-50 bg-white/80 backdrop-blur-sm flex items-center justify-center">
           <div className="bg-black/80 text-white px-6 py-6 rounded-2xl shadow-xl text-center animate-pulse max-w-sm">
-            <div className="text-2xl font-bold mb-2">🛠️ Comprando seus LBX...</div>
+            <div className="text-2xl font-bold mb-2">🛠️ Comprando seus LBXO...</div>
             <div className="text-sm text-gray-300">Aguarde alguns instantes, sócio! 🔄</div>
           </div>
         </div>
@@ -199,9 +199,9 @@ export default function SwapForm() {
           className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white text-lg font-semibold py-3 rounded-full hover:from-green-600 hover:to-green-700 transition disabled:opacity-50"
         >
           {loading
-            ? toToken === 'LBX'
-              ? 'Comprando LBX...'
-              : 'Vendendo LBX...'
+            ? toToken === 'LBXO'
+              ? 'Comprando LBXO...'
+              : 'Vendendo LBXO...'
             : 'Executar Swap'}
         </button>
       </div>
