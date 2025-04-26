@@ -1,77 +1,61 @@
-'use client';
+// app/whitepaper/page.tsx
 
 export default function WhitepaperPage() {
   return (
-    <main
-      className="min-h-screen bg-cover bg-center flex flex-col items-center justify-start pt-12 px-4"
-      style={{ backgroundImage: "url('/bgwhite.png')" }}
-    >
-      <div className="bg-black/70 rounded-3xl p-8 text-white max-w-4xl w-full shadow-2xl border border-white/20 backdrop-blur-sm">
-        <h1 className="text-5xl font-bold mb-10 text-center drop-shadow-lg">Koala Reserv - $NAP Whitepaper</h1>
+    <main className="max-w-4xl mx-auto px-6 py-12 text-gray-800">
+      <h1 className="text-4xl font-bold text-center text-primary mb-12">
+        📄 Whitepaper - LBX Group
+      </h1>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-3">Introduction</h2>
-          <p>
-            Koala Reserv began as a lighthearted idea between a group of friends who could only talk about crypto for two hours a day. That’s where the Koala was born — a symbol of restful focus. While it sleeps most of the day, during its two hours of activity, it works hard to grow a true decentralized reserve.
-          </p>
-        </section>
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4 text-primary">1. Resumo Executivo</h2>
+        <p className="text-base leading-relaxed">
+          O <strong>LBX Group</strong> é uma comunidade focada em proteger o patrimônio dos seus membros contra a desvalorização de moedas fiduciárias, utilizando stablecoins como o USDC. Através de estratégias seguras na blockchain Solana, buscamos gerar rendimento real e sustentável, além de valorizar o token LBX.
+        </p>
+      </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-3">Purpose of $NAP</h2>
-          <p>
-            $NAP is a token designed to create a stable, non-inflationary currency supported by an investment fund that reinvests into itself, generating yield for its holders.
-          </p>
-        </section>
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4 text-primary">2. Visão Geral do Projeto</h2>
+        <p className="text-base leading-relaxed">
+          Democratizamos o acesso ao universo cripto com segurança, educação e suporte direto à comunidade. Nosso foco são iniciantes, que encontram no LBX uma forma simples e transparente de participar do ecossistema cripto.
+        </p>
+      </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-3">Tokenomics</h2>
-          <ul className="list-disc list-inside space-y-1">
-            <li>1 Billion Total Supply (Fixed)</li>
-            <li>30% Fund Reserve Wallet Address : 5ArPQSA9vM7sukJzsFdkEnUzG5NALCDDcEm6Li5VoZRS</li>
-            <li>10% Liquidity on Orca - Wallet: E8E6TgsLVgC7MDo7y7P2Y7kz9syUAmFeVJTijw3okVMH</li>
-            <li>3% Airdrop - Wallet: DrqJ7X2UbdeZH64iEgNPW1hf7oMeVkcqxhVf1RKPDyXu</li>
-            <li>7% Marketing - Wallet: 5JWD7G8coTQ5ysL8kbhJu1Bsyj9AjE9DRvJEMRqys7sA</li>
-            <li>10% Staking Reserve - Wallet: 5zzk8NpGam62zXTEXrhg5tjMm7v5s4GDMeuvfFeXMJaC</li>
-          </ul>
-        </section>
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4 text-primary">3. Modelo Econômico</h2>
+        <p className="text-base leading-relaxed">
+          O token LBX é emitido somente quando há entrada real de USDC. 50% dos lucros são reinvestidos automaticamente, enquanto os outros 50% são decididos pela comunidade via votação. Nosso crescimento é sempre 100% lastreado.
+        </p>
+      </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-3">Utility</h2>
-          <p>
-            Holding $NAP gives access to community voting rights and eligibility to earn exclusive community-created NFTs.
-          </p>
-        </section>
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4 text-primary">4. Utilidade do Token</h2>
+        <ul className="list-disc pl-5 space-y-2 text-base leading-relaxed">
+          <li><strong>Valorização:</strong> Crescimento do valor conforme o fundo aumenta.</li>
+          <li><strong>Stake:</strong> Recompensas para quem bloqueia LBX.</li>
+          <li><strong>Governança:</strong> Participação em decisões importantes do grupo.</li>
+          <li><strong>Área Exclusiva:</strong> Acesso a funções premium para holders.</li>
+          <li><strong>Futuro:</strong> Pagamentos com LBX e cartões para sócios.</li>
+        </ul>
+      </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-3">Fund Strategy</h2>
-          <p>
-            The Koala Reserve fund invests mainly in the SOL/USDC pool and follows this distribution model:
-          </p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>50% Reinvested into the SOL/USDC pool</li>
-            <li>20% Reserved in SOL (staked via Marinade)</li>
-            <li>20% Reserved in USDC for opportunities</li>
-            <li>10% Used for $NAP liquidity and buybacks</li>
-          </ul>
-          <p className="mt-2">
-            Weekly updates and staking announcements are posted on <a href="https://x.com/NapReserv" className="text-blue-400 underline">X</a> and <a href="https://t.me/koalanapreserv" className="text-blue-400 underline">Telegram</a>.
-          </p>
-        </section>
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4 text-primary">5. Estratégia de Investimento</h2>
+        <p className="text-base leading-relaxed">
+          Até atingirmos 50.000 USDC, 100% do capital será alocado em estratégias conservadoras. Após isso, até 20% poderá ser usado em ativos de risco moderado, sempre com controle, transparência e foco na preservação do patrimônio.
+        </p>
+      </section>
 
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-3">Governance</h2>
-          <p>
-            Currently managed by a small group of friends, proposals are made and voted on by the community. Once the fund reaches $1 million, a full DAO will be activated through the $DNAP governance token.
-          </p>
-        </section>
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold mb-4 text-primary">6. Governança</h2>
+        <p className="text-base leading-relaxed">
+          Quem possui 100.000 LBX ou mais pode votar. O peso do voto é proporcional ao supply. Votações duram 5 dias, são divulgadas no site e nos canais oficiais. Apenas propostas produtivas são aceitas, garantindo seriedade no processo.
+        </p>
+      </section>
 
-        <section>
-          <h2 className="text-2xl font-semibold mb-3">Final Words</h2>
-          <p>
-            $NAP started as a joke but evolved into a movement. Join the Koala. Sleep well. Stack wisely.
-          </p>
-        </section>
-      </div>
+      <footer className="mt-16 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} LBX Group. Todos os direitos reservados.
+      </footer>
     </main>
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-const LBX_MINT = 'LBX3EEwzxu2mbj7n5Mm3rjXoA4dQbaNX6YnQXPV6CAe';
+const LBX_MINT = 'CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1';
 const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 
 export default function PriceLbx() {
@@ -50,7 +50,7 @@ export default function PriceLbx() {
           </div>
           <div>
             <p className="text-sm text-gray-500">Preço Atual</p>
-            <p className="font-semibold text-lg text-gray-800">1 LBX</p>
+            <p className="font-semibold text-lg text-gray-800">1 LBX One</p>
           </div>
         </div>
 

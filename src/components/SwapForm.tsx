@@ -5,7 +5,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { VersionedTransaction } from '@solana/web3.js';
 
 const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
-const LBX_MINT = 'LBX3EEwzxu2mbj7n5Mm3rjXoA4dQbaNX6YnQXPV6CAe';
+const LBX_MINT = 'CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1';
 
 type QuoteResponse = {
   outAmount: string;
