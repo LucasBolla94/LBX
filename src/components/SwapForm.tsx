@@ -12,7 +12,6 @@ type QuoteResponse = {
 };
 
 export default function SwapForm() {
-  // --- código de controle, sem mudanças ---
   const [fromToken, setFromToken] = useState<'USDC' | 'LBXO'>('USDC');
   const [toToken, setToToken] = useState<'LBXO' | 'USDC'>('LBXO');
   const [amount, setAmount] = useState('');
@@ -40,8 +39,8 @@ export default function SwapForm() {
       setQuoteAmount(outAmount.toFixed(4));
       setQuote(data);
     } catch (error) {
-      console.error('Erro ao buscar quote:', error);
-      setQuoteAmount('Erro');
+      console.error('Error fetching quote:', error);
+      setQuoteAmount('Error');
       setQuote(null);
     } finally {
       setLoading(false);
@@ -69,8 +68,8 @@ export default function SwapForm() {
   };
 
   const executeSwap = async () => {
-    if (!publicKey || !signTransaction) return showMessage('⚠️ Conecte uma carteira compatível com signTransaction.');
-    if (!amount || Number(amount) <= 0) return showMessage('⚠️ Insira um valor válido.');
+    if (!publicKey || !signTransaction) return showMessage('⚠️ Connect a wallet compatible with signTransaction.');
+    if (!amount || Number(amount) <= 0) return showMessage('⚠️ Please enter a valid amount.');
 
     setLoading(true);
     setIsProcessing(true);
@@ -78,7 +77,7 @@ export default function SwapForm() {
 
     try {
       await fetchQuote();
-      if (!quote) return showMessage('⚠️ Falha ao gerar a cotação atualizada.');
+      if (!quote) return showMessage('⚠️ Failed to generate updated quote.');
 
       const response = await fetch('https://lite-api.jup.ag/swap/v1/swap', {
         method: 'POST',
@@ -93,7 +92,7 @@ export default function SwapForm() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(`Erro ${response.status}: ${JSON.stringify(error)}`);
+        throw new Error(`Error ${response.status}: ${JSON.stringify(error)}`);
       }
 
       const swapData = await response.json();
@@ -108,20 +107,20 @@ export default function SwapForm() {
       const confirmation = await connection.confirmTransaction(txid, 'finalized');
 
       if (confirmation.value.err) {
-        throw new Error(`Erro de transação:\n${JSON.stringify(confirmation.value.err)}\nhttps://solscan.io/tx/${txid}`);
+        throw new Error(`Transaction error:\n${JSON.stringify(confirmation.value.err)}\nhttps://solscan.io/tx/${txid}`);
       } else {
         showMessage(
-          `🚀 Swap realizado com sucesso!\n🔗 ` +
-          `<a href="https://solscan.io/tx/${txid}" target="_blank" class="underline text-blue-400 font-semibold">Ver no Solscan</a>`
+          `🚀 Swap completed successfully!\n🔗 ` +
+          `<a href="https://solscan.io/tx/${txid}" target="_blank" class="underline text-blue-400 font-semibold">View on Solscan</a>`
         );
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error('Erro ao executar swap:', error);
-        showMessage(error.message || 'Erro inesperado ao executar swap.');
+        console.error('Swap error:', error);
+        showMessage(error.message || 'Unexpected error during swap.');
       } else {
-        console.error('Erro desconhecido ao executar swap:', error);
-        showMessage('Erro inesperado.');
+        console.error('Unknown swap error:', error);
+        showMessage('Unexpected error.');
       }
     } finally {
       setIsProcessing(false);
@@ -134,14 +133,14 @@ export default function SwapForm() {
       {isProcessing && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
           <div className="bg-black text-white px-6 py-6 rounded-2xl shadow-xl text-center animate-pulse max-w-sm">
-            <div className="text-2xl font-bold mb-2">🛠️ Processando swap...</div>
-            <div className="text-sm text-gray-400">Aguarde alguns instantes... 🔄</div>
+            <div className="text-2xl font-bold mb-2">🛠️ Processing your swap...</div>
+            <div className="text-sm text-gray-400">Please wait a moment... 🔄</div>
           </div>
         </div>
       )}
 
       <div className="bg-gray-900 shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-xl mx-auto relative border border-gray-600">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Swap de Tokens</h2>
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">Token Swap</h2>
 
         {successMessage && (
           <div
@@ -152,9 +151,9 @@ export default function SwapForm() {
           </div>
         )}
 
-        {/* Formulário De */}
+        {/* From Field */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-white mb-1">De</label>
+          <label className="block text-sm font-medium text-white mb-1">From</label>
           <div className="flex justify-between items-center border border-gray-500 rounded-xl px-4 py-3 bg-gray-800">
             <span className="font-bold text-green-400">{fromToken}</span>
             <input
@@ -174,13 +173,13 @@ export default function SwapForm() {
             className="text-white hover:text-green-400 text-lg font-medium flex items-center gap-2"
             disabled={loading}
           >
-            🔁 Inverter tokens
+            🔁 Swap Tokens
           </button>
         </div>
 
-        {/* Formulário Para */}
+        {/* To Field */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-white mb-1">Para</label>
+          <label className="block text-sm font-medium text-white mb-1">To</label>
           <div className="flex justify-between items-center border border-gray-500 rounded-xl px-4 py-3 bg-gray-800">
             <span className="font-bold text-green-400">{toToken}</span>
             <div className="text-right text-green-400 text-3xl font-bold w-full ml-4 tracking-widest">
@@ -196,9 +195,9 @@ export default function SwapForm() {
         >
           {loading
             ? toToken === 'LBXO'
-              ? 'Comprando LBXO...'
-              : 'Vendendo LBXO...'
-            : 'Executar Swap'}
+              ? 'Buying LBXO...'
+              : 'Selling LBXO...'
+            : 'Execute Swap'}
         </button>
       </div>
     </>
