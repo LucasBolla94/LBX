@@ -1,18 +1,15 @@
 // src/app/ref/[refferCode]/page.tsx
-
-'use client';
-
 import AirDropAmount from '@/components/AirDropAmount';
-import RefSocial from '@/components/RefSocial';
+import RefSocial    from '@/components/RefSocial';
 
 export const dynamic = 'force-dynamic';
 
-export default function RefPage({
-  params,
-}: {
-  params: { refferCode: string };
-}) {
-  const { refferCode } = params;
+interface PageProps {
+  params: Promise<{ refferCode: string }>;
+}
+
+export default async function RefPage({ params }: PageProps) {
+  const { refferCode } = await params;
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
