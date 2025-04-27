@@ -41,25 +41,25 @@ export default function PriceLbx() {
   }, []);
 
   return (
-    <section className="bg-gray-100 py-6 px-4 md:px-20">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 max-w-3xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
+    <section className="bg-black py-6 px-4 md:px-20">
+      <div className="bg-gray-900 border border-gray-600 rounded-2xl shadow-sm max-w-3xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
         {/* Ícone + Token */}
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl shadow-inner">
+          <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-green-600 text-xl shadow-inner">
             💰
           </div>
           <div>
-            <p className="text-sm text-gray-500">Preço Atual</p>
-            <p className="font-semibold text-lg text-gray-800">1 LBX One</p>
+            <p className="text-sm text-gray-300">Preço Atual</p>
+            <p className="font-semibold text-lg text-white">1 LBX One</p>
           </div>
         </div>
 
         {/* Valor */}
         <div className="flex flex-col items-end">
           {error ? (
-            <p className="text-red-600 font-semibold text-base">Erro ao carregar</p>
+            <p className="text-red-500 font-semibold text-base">Erro ao carregar</p>
           ) : price !== null ? (
-            <p className="text-3xl font-bold text-green-600 tracking-tight">
+            <p className="text-3xl font-bold text-green-400 tracking-widest">
               ${price.toFixed(6)}
             </p>
           ) : (

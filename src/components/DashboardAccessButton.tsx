@@ -8,7 +8,8 @@ import { useRouter } from 'next/navigation';
 const MINT_LBXO = new PublicKey('CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1');
 const RPC = 'https://mainnet.helius-rpc.com/?api-key=44a7b170-0809-4848-b621-0f854499407a';
 
-export default function DashboardAccessButton() {
+// 👇👇 Adiciona aqui a tipagem da propriedade minimal
+export default function DashboardAccessButton({ minimal }: { minimal?: boolean }) {
   const wallet = useWallet();
   const router = useRouter();
 
@@ -24,9 +25,7 @@ export default function DashboardAccessButton() {
       try {
         const response = await fetch(RPC, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             jsonrpc: '2.0',
             id: 1,
@@ -83,9 +82,13 @@ export default function DashboardAccessButton() {
   return (
     <button
       onClick={() => router.push('/dash')}
-      className="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out shadow-lg hover:scale-105"
+      className={`bg-green-600 text-white rounded-full hover:bg-green-700 transition-all duration-300 ease-in-out shadow-lg hover:scale-105
+      ${minimal ? 'px-3 py-2 text-2xl' : 'px-6 py-3 text-base'}`}
     >
-      🔐 Access Dashboard
+      <span className={`${minimal ? '' : 'hidden sm:block'}`}>🔒👤</span> {/* Mobile emojis */}
+      {!minimal && (
+        <span className="hidden sm:block">🔐 Access Dashboard</span> /* Desktop texto */
+      )}
     </button>
   );
 }

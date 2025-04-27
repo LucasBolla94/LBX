@@ -1,24 +1,66 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import WalletButton from './WalletButton';
 import DashboardAccessButton from './DashboardAccessButton';
 
 export default function NavBar() {
-  return (
-    <nav className="w-full bg-white shadow-md px-6 py-4 flex justify-between items-center">
-      <div className="text-xl font-bold text-primary">LBX Group</div>
+  const [menuOpen, setMenuOpen] = useState(false);
 
-      <div className="space-x-4 text-sm">
-        <Link href="/" className="hover:text-primary transition">Home</Link>
-        <Link href="/whitepaper" className="hover:text-primary transition">Whitepaper</Link>
+  return (
+    <nav className="w-full bg-black shadow-md px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-2 sm:gap-0 relative">
+      
+      {/* Logo que abre o menu */}
+      <div className="flex items-center">
+        <button onClick={() => setMenuOpen(!menuOpen)} className="focus:outline-none">
+          <Image
+            src="/logo.png"
+            alt="LBX Logo"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
+        </button>
+      </div>
+
+      {/* Links de navegação (desktop) */}
+      <div className="hidden sm:flex flex-wrap gap-4 text-sm justify-center">
+        <Link href="/" className="hover:text-primary text-white transition">Home</Link>
+        <Link href="/whitepaper" className="hover:text-primary text-white transition">Whitepaper</Link>
       </div>
 
       {/* Botões lado a lado */}
-      <div className="flex items-center space-x-4">
-        <DashboardAccessButton />
+      <div className="flex items-center justify-center gap-4">
+        {/* Versão normal no PC */}
+        <div className="hidden sm:block">
+          <DashboardAccessButton />
+        </div>
+        {/* Versão minimal no mobile */}
+        <div className="sm:hidden">
+          <DashboardAccessButton minimal />
+        </div>
         <WalletButton />
       </div>
+
+      {/* Menu aberto no mobile com animação */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="absolute top-20 left-4 right-4 bg-black rounded-xl shadow-lg p-4 flex flex-col gap-4 sm:hidden z-50"
+          >
+            <Link href="/" className="hover:text-primary text-white transition" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link href="/whitepaper" className="hover:text-primary text-white transition" onClick={() => setMenuOpen(false)}>Whitepaper</Link>
+            {/* Você pode adicionar mais links aqui no futuro */}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

@@ -12,6 +12,7 @@ type QuoteResponse = {
 };
 
 export default function SwapForm() {
+  // --- código de controle, sem mudanças ---
   const [fromToken, setFromToken] = useState<'USDC' | 'LBXO'>('USDC');
   const [toToken, setToToken] = useState<'LBXO' | 'USDC'>('LBXO');
   const [amount, setAmount] = useState('');
@@ -20,11 +21,9 @@ export default function SwapForm() {
   const [loading, setLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
   const messageRef = useRef<HTMLDivElement | null>(null);
   const { publicKey, signTransaction } = useWallet();
   const { connection } = useConnection();
-
   const inputMint = fromToken === 'USDC' ? USDC_MINT : LBX_MINT;
   const outputMint = toToken === 'LBXO' ? LBX_MINT : USDC_MINT;
 
@@ -36,10 +35,8 @@ export default function SwapForm() {
       const url = `https://lite-api.jup.ag/swap/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${rawAmount}&slippageBps=50&restrictIntermediateTokens=true`;
       const response = await fetch(url);
       const data = await response.json();
-
       const decimals = toToken === 'LBXO' ? 9 : 6;
       const outAmount = Number(data.outAmount) / 10 ** decimals;
-
       setQuoteAmount(outAmount.toFixed(4));
       setQuote(data);
     } catch (error) {
@@ -85,10 +82,7 @@ export default function SwapForm() {
 
       const response = await fetch('https://lite-api.jup.ag/swap/v1/swap', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
           quoteResponse: quote,
           userPublicKey: publicKey.toBase58(),
@@ -117,8 +111,8 @@ export default function SwapForm() {
         throw new Error(`Erro de transação:\n${JSON.stringify(confirmation.value.err)}\nhttps://solscan.io/tx/${txid}`);
       } else {
         showMessage(
-          `🚀 Sócio, swap realizado com sucesso!\n🌍 Rumo à jornada!\n🔗 ` +
-          `<a href="https://solscan.io/tx/${txid}" target="_blank" class="underline text-blue-700 font-semibold">Ver no Solscan</a>`
+          `🚀 Swap realizado com sucesso!\n🔗 ` +
+          `<a href="https://solscan.io/tx/${txid}" target="_blank" class="underline text-blue-400 font-semibold">Ver no Solscan</a>`
         );
       }
     } catch (error) {
@@ -138,16 +132,16 @@ export default function SwapForm() {
   return (
     <>
       {isProcessing && (
-        <div className="fixed inset-0 z-50 bg-white/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-black/80 text-white px-6 py-6 rounded-2xl shadow-xl text-center animate-pulse max-w-sm">
-            <div className="text-2xl font-bold mb-2">🛠️ Comprando seus LBXO...</div>
-            <div className="text-sm text-gray-300">Aguarde alguns instantes, sócio! 🔄</div>
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-black text-white px-6 py-6 rounded-2xl shadow-xl text-center animate-pulse max-w-sm">
+            <div className="text-2xl font-bold mb-2">🛠️ Processando swap...</div>
+            <div className="text-sm text-gray-400">Aguarde alguns instantes... 🔄</div>
           </div>
         </div>
       )}
 
-      <div className="bg-white shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-xl mx-auto relative">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Swap de Tokens</h2>
+      <div className="bg-gray-900 shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-xl mx-auto relative border border-gray-600">
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">Swap de Tokens</h2>
 
         {successMessage && (
           <div
@@ -158,14 +152,15 @@ export default function SwapForm() {
           </div>
         )}
 
+        {/* Formulário De */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600 mb-1">De</label>
-          <div className="flex justify-between items-center border border-gray-300 rounded-xl px-4 py-3 bg-gray-100 text-xl">
-            <span className="font-bold text-gray-800">{fromToken}</span>
+          <label className="block text-sm font-medium text-white mb-1">De</label>
+          <div className="flex justify-between items-center border border-gray-500 rounded-xl px-4 py-3 bg-gray-800">
+            <span className="font-bold text-green-400">{fromToken}</span>
             <input
               type="number"
               placeholder="0.00"
-              className="bg-transparent text-right text-gray-900 text-2xl font-semibold w-full ml-4 focus:outline-none"
+              className="bg-transparent text-right text-green-400 text-3xl font-bold w-full ml-4 focus:outline-none tracking-widest"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               disabled={loading}
@@ -176,18 +171,19 @@ export default function SwapForm() {
         <div className="flex justify-center my-4">
           <button
             onClick={handleSwap}
-            className="text-gray-600 hover:text-black text-lg font-medium flex items-center gap-2"
+            className="text-white hover:text-green-400 text-lg font-medium flex items-center gap-2"
             disabled={loading}
           >
             🔁 Inverter tokens
           </button>
         </div>
 
+        {/* Formulário Para */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-600 mb-1">Para</label>
-          <div className="flex justify-between items-center border border-gray-300 rounded-xl px-4 py-3 bg-gray-100 text-xl">
-            <span className="font-bold text-gray-800">{toToken}</span>
-            <div className="text-right text-gray-900 text-2xl font-semibold w-full ml-4">
+          <label className="block text-sm font-medium text-white mb-1">Para</label>
+          <div className="flex justify-between items-center border border-gray-500 rounded-xl px-4 py-3 bg-gray-800">
+            <span className="font-bold text-green-400">{toToken}</span>
+            <div className="text-right text-green-400 text-3xl font-bold w-full ml-4 tracking-widest">
               {loading ? '...' : quoteAmount}
             </div>
           </div>
