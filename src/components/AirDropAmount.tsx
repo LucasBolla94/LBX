@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 import { db } from "@/app/lib/firebase";
@@ -11,8 +11,6 @@ export default function AirDropAmount() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let intervalId: number;
-
     const fetchAmount = async () => {
       try {
         const docRef = doc(db, "AirDropAmount", "count");
@@ -33,20 +31,16 @@ export default function AirDropAmount() {
     };
 
     fetchAmount();
-    intervalId = window.setInterval(fetchAmount, 10000);
-    return () => {
-      window.clearInterval(intervalId);
-    };
+    const intervalId = window.setInterval(fetchAmount, 10_000);
+    return () => window.clearInterval(intervalId);
   }, []);
 
-  const formatAmount = (value: number) => {
-    return value.toLocaleString('pt-BR');
-  };
+  const formatAmount = (value: number) => value.toLocaleString('pt-BR');
 
   const getFontSize = (value: number) => {
-    if (value >= 1_000_000_000) return "text-4xl sm:text-5xl"; // acima de 1 bilhão
-    if (value >= 10_000_000) return "text-5xl sm:text-6xl";    // acima de 10 milhões
-    return "text-6xl sm:text-7xl";                             // normal até 10 milhões
+    if (value >= 1_000_000_000) return "text-4xl sm:text-5xl";
+    if (value >= 10_000_000)   return "text-5xl sm:text-6xl";
+    return "text-6xl sm:text-7xl";
   };
 
   return (
@@ -70,7 +64,11 @@ export default function AirDropAmount() {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="flex items-center justify-center space-x-2"
             >
-              <span className={`font-extrabold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent drop-shadow-md ${amount !== null ? getFontSize(amount) : "text-5xl"}`}>
+              <span
+                className={`font-extrabold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent drop-shadow-md ${
+                  amount !== null ? getFontSize(amount) : "text-5xl"
+                }`}
+              >
                 {amount !== null ? formatAmount(amount) : "0"}
               </span>
               <span className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
