@@ -5,6 +5,9 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/navigation';
 import { PublicKey } from '@solana/web3.js';
 import LoadPage from '@/components/LoadPage';
+import Portfolio from '@/components/dash/Portfolio';
+import RewardAirDrop from '@/components/dash/RewardAirDrop';
+import PoolVote from '@/components/dash/PoolVote';
 
 const MINT_LBXO = new PublicKey('CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1');
 const RPC = 'https://mainnet.helius-rpc.com/?api-key=44a7b170-0809-4848-b621-0f854499407a';
@@ -91,10 +94,34 @@ export default function DashPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Aqui você vai adicionar os componentes do dashboard depois */}
-      <div className="p-4">
-        <h1 className="text-2xl font-bold">Welcome to the Dashboard!</h1>
+    <div className="min-h-screen bg-black text-white px-4 py-8">
+      {/* Header do Painel */}
+      <div className="text-center mb-10">
+        <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-green-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
+          🧑‍💻 LBXO Dashboard
+        </h1>
+        <p className="text-gray-400 mt-2 text-sm sm:text-base">
+          Manage your portfolio, rewards, and community votes.
+        </p>
+      </div>
+
+      {/* Painel Principal */}
+      <div className="flex flex-col gap-10 items-center">
+        
+        {/* Portfolio (LBXO balance e valor) */}
+        <Portfolio />
+
+        {/* Reward AirDrop (Recompensas de Referidos) */}
+        <RewardAirDrop />
+
+        {/* Votações (abertas e futuras) */}
+        <div className="w-full max-w-7xl mx-auto px-2 sm:px-4">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
+            📢 Community Votes
+          </h2>
+          <PoolVote />
+        </div>
+
       </div>
     </div>
   );
