@@ -1,6 +1,12 @@
 import RefSocial from "@/components/RefSocial";
 
-export default function RefPage({ params }: { params: { refferCode: string } }) {
+interface RefPageProps {
+  params: {
+    refferCode: string;
+  };
+}
+
+export default async function RefPage({ params }: RefPageProps) {
   const { refferCode } = params;
 
   return (
