@@ -1,12 +1,8 @@
 import RefSocial from "@/components/RefSocial";
 
-interface RefPageProps {
-  params: {
-    refferCode: string;
-  };
-}
+export const dynamic = 'force-dynamic';
 
-export default function RefPage({ params }: RefPageProps) {
+export default function RefPage({ params }: { params: { refferCode: string } }) {
   const { refferCode } = params;
 
   return (
