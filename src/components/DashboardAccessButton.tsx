@@ -82,7 +82,7 @@ export default function DashboardAccessButton() {
 
   return (
     <button
-      onClick={() => router.push('/dashboard')}
+      onClick={() => router.push('/dash')}
       className="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out shadow-lg hover:scale-105"
     >
       🔐 Access Dashboard

@@ -7,12 +7,12 @@ import RefSocial from '@/components/RefSocial';
 
 export const dynamic = 'force-dynamic';
 
-export default async function RefPage({
+export default function RefPage({
   params,
 }: {
-  params: Promise<{ refferCode: string }>;
+  params: { refferCode: string };
 }) {
-  const { refferCode } = await params;
+  const { refferCode } = params;
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
