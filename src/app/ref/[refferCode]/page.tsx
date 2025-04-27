@@ -1,9 +1,15 @@
+// src/app/ref/[refferCode]/page.tsx
+
 import RefSocial from "@/components/RefSocial";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-export default function RefPage({ params }: { params: { refferCode: string } }) {
-  const { refferCode } = params;
+export default async function RefPage({
+  params,
+}: {
+  params: Promise<{ refferCode: string }>;
+}) {
+  const { refferCode } = await params;
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
