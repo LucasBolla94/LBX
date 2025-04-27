@@ -12,18 +12,13 @@ type QuoteResponse = {
 };
 
 function formatNumberInput(value: string) {
-  // Remove caracteres que não são número ou ponto
   const cleaned = value.replace(/[^0-9.]/g, '');
   const parts = cleaned.split('.');
-
-  // Formata parte inteira
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
   return parts.join('.');
 }
 
 function parseFormattedNumber(value: string) {
-  // Remove vírgulas para converter corretamente
   return value.replace(/,/g, '');
 }
 
@@ -64,7 +59,6 @@ export default function SwapForm() {
     const timer = setTimeout(() => {
       fetchQuote(amount);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [amount, fetchQuote]);
 
@@ -180,11 +174,11 @@ export default function SwapForm() {
           <div className="flex justify-between items-center border border-gray-500 rounded-xl px-4 py-3 bg-gray-800">
             <span className="font-bold text-green-400">{fromToken}</span>
             <input
-              type="number"
+              type="text"
               placeholder="0.00"
               className="bg-transparent text-right text-green-400 text-3xl font-bold w-full ml-4 focus:outline-none tracking-widest"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={handleInputChange}
               disabled={loading}
             />
           </div>
@@ -212,7 +206,7 @@ export default function SwapForm() {
         </div>
 
         <button
-          disabled={!amount || parseFloat(amount) <= 0 || !quote || loading}
+          disabled={!amount || parseFloat(parseFormattedNumber(amount)) <= 0 || !quote || loading}
           onClick={executeSwap}
           className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white text-lg font-semibold py-3 rounded-full hover:from-green-600 hover:to-green-700 transition disabled:opacity-50"
         >
