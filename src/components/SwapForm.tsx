@@ -11,6 +11,22 @@ type QuoteResponse = {
   outAmount: string;
 };
 
+function formatNumberInput(value: string) {
+  // Remove caracteres que não são número ou ponto
+  const cleaned = value.replace(/[^0-9.]/g, '');
+  const parts = cleaned.split('.');
+
+  // Formata parte inteira
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return parts.join('.');
+}
+
+function parseFormattedNumber(value: string) {
+  // Remove vírgulas para converter corretamente
+  return value.replace(/,/g, '');
+}
+
 export default function SwapForm() {
   const [fromToken, setFromToken] = useState<'USDC' | 'LBXO'>('USDC');
   const [toToken, setToToken] = useState<'LBXO' | 'USDC'>('LBXO');
@@ -26,30 +42,31 @@ export default function SwapForm() {
   const inputMint = fromToken === 'USDC' ? USDC_MINT : LBX_MINT;
   const outputMint = toToken === 'LBXO' ? LBX_MINT : USDC_MINT;
 
-  const fetchQuote = useCallback(async () => {
-    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) return;
+  const fetchQuote = useCallback(async (amountToQuote: string) => {
+    const rawAmount = Math.floor(Number(parseFormattedNumber(amountToQuote)) * 10 ** 6);
+    if (!rawAmount || rawAmount <= 0) return;
     try {
-      setLoading(true);
-      const rawAmount = Math.floor(Number(amount) * 10 ** 6);
       const url = `https://lite-api.jup.ag/swap/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${rawAmount}&slippageBps=50&restrictIntermediateTokens=true`;
       const response = await fetch(url);
       const data = await response.json();
       const decimals = toToken === 'LBXO' ? 9 : 6;
       const outAmount = Number(data.outAmount) / 10 ** decimals;
-      setQuoteAmount(outAmount.toFixed(4));
+      setQuoteAmount(outAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 }));
       setQuote(data);
     } catch (error) {
       console.error('Error fetching quote:', error);
       setQuoteAmount('Error');
       setQuote(null);
-    } finally {
-      setLoading(false);
     }
-  }, [amount, inputMint, outputMint, toToken]);
+  }, [inputMint, outputMint, toToken]);
 
   useEffect(() => {
-    fetchQuote();
-  }, [fetchQuote]);
+    const timer = setTimeout(() => {
+      fetchQuote(amount);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [amount, fetchQuote]);
 
   const handleSwap = () => {
     setFromToken((prev) => (prev === 'USDC' ? 'LBXO' : 'USDC'));
@@ -67,16 +84,22 @@ export default function SwapForm() {
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    const formatted = formatNumberInput(raw);
+    setAmount(formatted);
+  };
+
   const executeSwap = async () => {
     if (!publicKey || !signTransaction) return showMessage('⚠️ Connect a wallet compatible with signTransaction.');
-    if (!amount || Number(amount) <= 0) return showMessage('⚠️ Please enter a valid amount.');
+    if (!amount || Number(parseFormattedNumber(amount)) <= 0) return showMessage('⚠️ Please enter a valid amount.');
 
     setLoading(true);
     setIsProcessing(true);
     setSuccessMessage(null);
 
     try {
-      await fetchQuote();
+      await fetchQuote(amount);
       if (!quote) return showMessage('⚠️ Failed to generate updated quote.');
 
       const response = await fetch('https://lite-api.jup.ag/swap/v1/swap', {
