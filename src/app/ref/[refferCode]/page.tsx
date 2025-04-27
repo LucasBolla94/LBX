@@ -6,7 +6,7 @@ interface RefPageProps {
   };
 }
 
-export default async function RefPage({ params }: RefPageProps) {
+export default function RefPage({ params }: RefPageProps) {
   const { refferCode } = params;
 
   return (
