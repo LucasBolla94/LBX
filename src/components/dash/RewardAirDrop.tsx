@@ -3,14 +3,17 @@
 import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { db } from '@/app/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { rewardRanges } from '@/utils/rewardTable'; // novo arquivo
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import BtnWithdraw from '@/components/dash/BtnWithdraw';
 
 export default function RewardAirDrop() {
   const wallet = useWallet();
   const [newUsers, setNewUsers] = useState<number | null>(null);
   const [reward, setReward] = useState<number>(0);
+  const [balance, setBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [payRequest, setPayRequest] = useState<boolean>(false);
+  const [withdrawRequested, setWithdrawRequested] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchReferralData = async () => {
@@ -24,25 +27,31 @@ export default function RewardAirDrop() {
         if (refDoc.exists()) {
           const data = refDoc.data();
           const users = data?.newusers || 0;
+          const userBalance = data?.balance || 0;
+          const userPayRequest = data?.payrequest || false;
+
           setNewUsers(users);
-
-          // Novo cálculo proporcional
-          let remaining = users;
-          let totalReward = 0;
-
-          for (const range of rewardRanges) {
-            const take = Math.min(remaining, range.upTo - (totalReward > 0 ? rewardRanges[rewardRanges.indexOf(range) - 1]?.upTo || 0 : 0));
-            if (take > 0) {
-              totalReward += take * range.multiplier;
-              remaining -= take;
-            }
-          }
-
-          setReward(totalReward);
+          setBalance(userBalance);
+          setPayRequest(userPayRequest);
+          setWithdrawRequested(userPayRequest);
         } else {
           setNewUsers(0);
-          setReward(0);
+          setBalance(0);
+          setPayRequest(false);
+          setWithdrawRequested(false);
         }
+
+        const q = query(collection(db, 'reffer-transfer'), where('walletAddress', '==', walletAddress));
+        const querySnapshot = await getDocs(q);
+
+        let totalAmount = 0;
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          totalAmount += data.amount || 0;
+        });
+
+        setReward(totalAmount);
+
       } catch (error) {
         console.error('Error fetching referral data:', error);
       } finally {
@@ -70,10 +79,26 @@ export default function RewardAirDrop() {
 
           <div className="my-6 w-full h-px bg-gradient-to-r from-green-400 via-purple-500 to-green-400" />
 
-          <p className="text-gray-400 text-lg mb-2">Total Reward:</p>
+          <p className="text-gray-400 text-lg mb-2">Total Already Withdrawn</p>
           <p className="text-green-300 text-5xl font-extrabold">{reward.toLocaleString()} $LBXO</p>
 
-          <p className="text-xs text-gray-500 mt-6">Rewards update automatically as new users join.</p>
+          <div className="mt-6" />
+          <p className="text-gray-400 text-lg mb-2">Total Available to Withdraw:</p>
+          <p className="text-green-300 text-4xl font-bold">{balance?.toLocaleString() || 0} $LBXO</p>
+
+          <p className="text-xs text-gray-500 mt-6 mb-4">Rewards update automatically as new users join.</p>
+
+          {/* Botão Withdraw */}
+          <div className="flex flex-col items-center">
+            {/* REMOVE o onClick daqui para não dar erro */}
+            <BtnWithdraw reward={balance || 0} disabled={payRequest || (balance || 0) < 500} />
+
+            {withdrawRequested && (
+              <div className="mt-4 text-green-400 text-sm bg-green-900 bg-opacity-30 rounded-xl px-4 py-2 shadow-md animate-pulse">
+                🎉 Withdrawal Request Successful! We’ll process it soon.
+              </div>
+            )}
+          </div>
         </>
       )}
     </section>
