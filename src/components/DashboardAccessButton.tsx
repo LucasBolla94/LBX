@@ -70,10 +70,10 @@ export default function DashboardAccessButton({ minimal }: { minimal?: boolean }
     return null;
   }
 
-  if (balance < 1_000) {
+  if (balance < 100) {
     return (
       <div className="flex items-center text-gray-500 text-sm space-x-1">
-        <span>Need 1000 LBXO to DashBoard</span>
+        <span>Need 100 LBXO to DashBoard</span>
         <span className="text-lg">❓</span>
       </div>
     );
