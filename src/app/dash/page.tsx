@@ -64,7 +64,7 @@ export default function DashPage() {
   }, [wallet.connected, wallet.publicKey]);
 
   useEffect(() => {
-    if (!loading && wallet.connected && balance < 500_000) {
+    if (!loading && wallet.connected && balance < 100) {
       setNotAllowed(true);
       const timer = setTimeout(() => {
         router.push('/');
