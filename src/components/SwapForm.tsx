@@ -41,7 +41,7 @@ export default function SwapForm() {
     const rawAmount = Math.floor(Number(parseFormattedNumber(amountToQuote)) * 10 ** 6);
     if (!rawAmount || rawAmount <= 0) return;
     try {
-      const url = `https://lite-api.jup.ag/swap/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${rawAmount}&slippageBps=50&restrictIntermediateTokens=true`;
+      const url = `https://lite-api.jup.ag/swap/v1/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${rawAmount}&slippageBps=300&restrictIntermediateTokens=true`;
       const response = await fetch(url);
       const data = await response.json();
       const decimals = toToken === 'LBXO' ? 9 : 6;

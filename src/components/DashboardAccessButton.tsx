@@ -85,10 +85,7 @@ export default function DashboardAccessButton({ minimal }: { minimal?: boolean }
       className={`bg-green-600 text-white rounded-full hover:bg-green-700 transition-all duration-300 ease-in-out shadow-lg hover:scale-105
       ${minimal ? 'px-3 py-2 text-2xl' : 'px-6 py-3 text-base'}`}
     >
-      <span className={`${minimal ? '' : 'hidden sm:block'}`}>🔒👤</span> {/* Mobile emojis */}
-      {!minimal && (
-        <span className="hidden sm:block">🔐 Access Dashboard</span> /* Desktop texto */
-      )}
+      <span className={`${minimal ? '' : 'hidden sm:block'}`}>🔒👤</span> 
     </button>
   );
 }
