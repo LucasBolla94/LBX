@@ -5,6 +5,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { db } from '@/app/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import BtnWithdraw from '@/components/dash/BtnWithdraw';
+import RefLink from '@/components/dash/RefLink'; // Importa o RefLink
 
 export default function RewardAirDrop() {
   const wallet = useWallet();
@@ -14,6 +15,7 @@ export default function RewardAirDrop() {
   const [loading, setLoading] = useState(true);
   const [payRequest, setPayRequest] = useState<boolean>(false);
   const [withdrawRequested, setWithdrawRequested] = useState<boolean>(false);
+  const [refferCode, setRefferCode] = useState<string>(''); // NOVO estado para guardar o refferCode
 
   useEffect(() => {
     const fetchReferralData = async () => {
@@ -29,16 +31,19 @@ export default function RewardAirDrop() {
           const users = data?.newusers || 0;
           const userBalance = data?.balance || 0;
           const userPayRequest = data?.payrequest || false;
+          const code = data?.refferCode || ''; // PEGA o refferCode
 
           setNewUsers(users);
           setBalance(userBalance);
           setPayRequest(userPayRequest);
           setWithdrawRequested(userPayRequest);
+          setRefferCode(code); // SETA o refferCode
         } else {
           setNewUsers(0);
           setBalance(0);
           setPayRequest(false);
           setWithdrawRequested(false);
+          setRefferCode('');
         }
 
         const q = query(collection(db, 'reffer-transfer'), where('walletAddress', '==', walletAddress));
@@ -86,11 +91,15 @@ export default function RewardAirDrop() {
           <p className="text-gray-400 text-lg mb-2">Total Available to Withdraw:</p>
           <p className="text-green-300 text-4xl font-bold">{balance?.toLocaleString() || 0} $LBXO</p>
 
-          <p className="text-xs text-gray-500 mt-6 mb-4">Rewards update automatically as new users join.</p>
+          <p className="text-xs text-gray-500 mt-6 mb-4">
+            Rewards update automatically as new users join.
+          </p>
+
+          {/* AQUI você chama o componente RefLink */}
+          {refferCode && <RefLink refferCode={refferCode} />}
 
           {/* Botão Withdraw */}
           <div className="flex flex-col items-center">
-            {/* REMOVE o onClick daqui para não dar erro */}
             <BtnWithdraw reward={balance || 0} disabled={payRequest || (balance || 0) < 500} />
 
             {withdrawRequested && (

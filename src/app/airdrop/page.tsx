@@ -1,13 +1,20 @@
-import Airdrop from "@/components/Airdrop";
+// src/app/airdrop/page.tsx
+
 import AirDropAmount from "@/components/AirDropAmount";
+import AirdropReg from "@/components/AirdropReg";
 
 export default function AirdropPage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-4 space-y-10">
-      {/* Exibe o total de airdrop acumulado no topo */}
-      <AirDropAmount />
+    <main className="flex flex-col items-center w-full min-h-screen bg-[var(--background)] p-4 gap-10">
+      {/* Total acumulado com largura fixa */}
+      <div className="w-full max-w-lg">
+        <AirDropAmount />
+      </div>
 
-      <Airdrop />
+      {/* Form de registro/referral com largura fixa */}
+      <div className="w-full max-w-lg">
+        <AirdropReg />
+      </div>
     </main>
   );
 }
