@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { db } from "@/app/lib/firebase";
@@ -35,43 +35,43 @@ export default function AirDropAmount() {
     return () => window.clearInterval(intervalId);
   }, []);
 
-  const formatAmount = (value: number) => value.toLocaleString('pt-BR');
+  const formatAmount = (value: number) => value.toLocaleString("pt-BR");
 
   const getFontSize = (value: number) => {
-    if (value >= 1_000_000_000) return "text-4xl sm:text-5xl";
-    if (value >= 10_000_000)   return "text-5xl sm:text-6xl";
-    return "text-6xl sm:text-7xl";
+    if (value >= 1_000_000_000) return "text-3xl sm:text-4xl";
+    if (value >= 10_000_000) return "text-4xl sm:text-5xl";
+    return "text-5xl sm:text-6xl";
   };
 
   return (
-    <div className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto p-6 sm:p-8 bg-gradient-to-br from-green-500 to-purple-600 rounded-3xl shadow-2xl flex flex-col items-center justify-center text-center">
-      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-6 drop-shadow-lg">
+    <div className="w-full max-w-md sm:max-w-lg mx-auto p-6 bg-gradient-to-br from-green-500 to-purple-600 rounded-3xl shadow-2xl flex flex-col items-center text-center">
+      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4">
         Total Airdrop Accumulated
       </h3>
 
       {loading ? (
-        <p className="text-white text-lg sm:text-xl animate-pulse">Loading...</p>
+        <p className="text-white text-base sm:text-lg animate-pulse">Loading...</p>
       ) : error ? (
-        <p className="text-red-300 text-lg sm:text-xl">{error}</p>
+        <p className="text-red-300 text-base sm:text-lg">{error}</p>
       ) : (
-        <div className="relative h-20 sm:h-24 md:h-28 flex items-center justify-center">
+        <div className="relative h-16 sm:h-20 md:h-24 flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={amount}
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="flex items-center justify-center space-x-2"
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="flex items-end space-x-2"
             >
               <span
-                className={`font-extrabold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent drop-shadow-md ${
-                  amount !== null ? getFontSize(amount) : "text-5xl"
+                className={`font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200 ${
+                  amount !== null ? getFontSize(amount) : "text-4xl sm:text-5xl"
                 }`}
               >
                 {amount !== null ? formatAmount(amount) : "0"}
               </span>
-              <span className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
+              <span className="text-base sm:text-lg md:text-xl font-semibold text-white">
                 $LBXO
               </span>
             </motion.div>
