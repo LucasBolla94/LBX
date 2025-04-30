@@ -30,6 +30,7 @@ export default function NavBar() {
       <div className="hidden sm:flex flex-wrap gap-6 text-base sm:text-lg justify-center">
         <Link href="/" className="hover:text-primary text-[var(--foreground)] transition">Home</Link>
         <Link href="/whitepaper" className="hover:text-primary text-[var(--foreground)] transition">Whitepaper</Link>
+        <Link href="/promo" className="hover:text-primary text-[var(--foreground)] transition">Rewards</Link>
       </div>
 
       {/* Botões lado a lado */}
@@ -68,6 +69,13 @@ export default function NavBar() {
               onClick={() => setMenuOpen(false)}
             >
               Whitepaper
+            </Link>
+            <Link
+              href="/promo"
+              className="hover:text-primary text-[var(--foreground)] transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              Rewards
             </Link>
             {/* New Links here */}
           </motion.div>

@@ -21,16 +21,24 @@ export default function RefLink({ refferCode }: RefLinkProps) {
   };
 
   return (
-    <div className="w-full mt-6 flex flex-col items-center">
-      <p className="text-gray-400 text-sm mb-2">Your Referral Link:</p>
-      <div className="w-full bg-gray-800 rounded-xl p-4 flex items-center justify-between shadow-md">
-        <span className="text-green-300 text-sm truncate">{link}</span>
-        <button
-          onClick={handleCopy}
-          className="ml-4 bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-4 rounded-xl text-sm transition-all"
-        >
-          {copied ? 'Copied!' : 'Copy'}
-        </button>
+    <div className="w-full mt-6 flex flex-col items-center gap-3">
+      <p className="text-[var(--foreground)]/70 text-base sm:text-lg">Your Referral Link:</p>
+
+      <div className="w-full bg-[var(--background)] border border-[var(--border)] rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
+        <span className="text-[var(--foreground)] text-base sm:text-lg truncate w-full">{link}</span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleCopy}
+            className="bg-[var(--foreground)] hover:opacity-90 text-[var(--background)] font-bold py-2 px-4 rounded-xl text-sm sm:text-base transition-all"
+          >
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
+          {copied && (
+            <span className="text-[var(--foreground)]/80 text-sm sm:text-base animate-fade-in">
+              Copied successfully!
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
