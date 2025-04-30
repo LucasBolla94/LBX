@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 const MINT_LBXO = new PublicKey('CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1');
 const RPC = 'https://mainnet.helius-rpc.com/?api-key=44a7b170-0809-4848-b621-0f854499407a';
 
-// 👇👇 Adiciona aqui a tipagem da propriedade minimal
 export default function DashboardAccessButton({ minimal }: { minimal?: boolean }) {
   const wallet = useWallet();
   const router = useRouter();
@@ -60,20 +59,34 @@ export default function DashboardAccessButton({ minimal }: { minimal?: boolean }
     if (wallet.connected) {
       checkLBXOBalance();
     }
-  }, [wallet.publicKey, wallet.connected]);
+  }, [wallet.connected, wallet.publicKey]);
+
+  const handleClick = () => {
+    if (wallet.connected && balance >= 1_000) {
+      router.push('/dash');
+    }
+  };
 
   if (loading) {
-    return <div className="text-center text-sm text-gray-500">Connect for DashBoard</div>;
+    return (
+      <div className="w-full text-center text-sm sm:text-base text-[var(--foreground)]">
+        Checking balance...
+      </div>
+    );
   }
 
   if (!wallet.connected) {
-    return null;
+    return (
+      <div className="w-full text-center text-sm sm:text-base text-[var(--foreground)]">
+        Connect your wallet to access
+      </div>
+    );
   }
 
   if (balance < 100) {
     return (
-      <div className="flex items-center text-gray-500 text-sm space-x-1">
-        <span>Need 100 LBXO to DashBoard</span>
+      <div className="flex flex-col sm:flex-row items-center justify-center text-[var(--foreground)] text-sm sm:text-base gap-1 sm:gap-2 text-center">
+        <span>Need at least 100 LBXO to access the Dashboard</span>
         <span className="text-lg">❓</span>
       </div>
     );
@@ -81,11 +94,12 @@ export default function DashboardAccessButton({ minimal }: { minimal?: boolean }
 
   return (
     <button
-      onClick={() => router.push('/dash')}
-      className={`bg-green-600 text-white rounded-full hover:bg-green-700 transition-all duration-300 ease-in-out shadow-lg hover:scale-105
-      ${minimal ? 'px-3 py-2 text-2xl' : 'px-6 py-3 text-base'}`}
+      onClick={handleClick}
+      className={`w-full sm:w-auto text-center rounded-full shadow-md transition-all duration-300 ease-in-out hover:scale-105
+        text-[var(--background)] bg-[var(--foreground)] hover:opacity-90
+        ${minimal ? 'px-4 py-2 text-base' : 'px-6 py-3 text-sm sm:text-base font-semibold'}`}
     >
-      <span className={`${minimal ? '' : 'hidden sm:block'}`}>🔒👤</span> 
+      {minimal ? '🔒' : '🔒 Access Dashboard'}
     </button>
   );
 }

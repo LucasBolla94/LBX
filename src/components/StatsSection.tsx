@@ -5,23 +5,23 @@ import Holders from './Holders'; // Importa o novo componente
 
 export default function StatsSection() {
   return (
-    <section className="bg-black py-12 px-6 md:px-20">
-      <div className="bg-black border border-green-600 rounded-xl shadow-lg p-6 md:p-10 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <section className="bg-[var(--background)] py-12 px-6 md:px-20">
+      <div className="bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-lg p-6 md:p-10 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-[var(--foreground)]">
         <div>
-          <p className="text-green-400 font-semibold text-lg">50,000,000 LBXO</p>
-          <p className="text-sm text-gray-300 mt-1">Total Supply</p>
+          <p className="font-semibold text-lg text-[var(--foreground)]">50M. $LBXO</p>
+          <p className="text-sm mt-1 text-[var(--foreground)]/70">Total Supply</p>
         </div>
         <div>
-          <p className="text-green-400 font-semibold text-lg">Available</p>
-          <p className="text-sm text-gray-300 mt-1">Stake</p>
+          <p className="font-semibold text-lg text-[var(--foreground)]">Available</p>
+          <p className="text-sm mt-1 text-[var(--foreground)]/70">Stake</p>
         </div>
         <div>
-          <Holders /> {/* Agora aqui busca automático */}
-          <p className="text-sm text-gray-300 mt-1">Holders</p>
+          <Holders />
+          <p className="text-sm mt-1 text-[var(--foreground)]/70">Holders</p>
         </div>
         <div>
-          <p className="text-green-400 font-semibold text-lg">Unavailable</p>
-          <p className="text-sm text-gray-300 mt-1">Farm</p>
+          <p className="font-semibold text-lg text-[var(--foreground)]">Unavailable</p>
+          <p className="text-sm mt-1 text-[var(--foreground)]/70">Farm</p>
         </div>
       </div>
     </section>

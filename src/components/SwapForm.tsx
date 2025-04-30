@@ -128,7 +128,7 @@ export default function SwapForm() {
       } else {
         showMessage(
           `🚀 Swap completed successfully!\n🔗 ` +
-          `<a href="https://solscan.io/tx/${txid}" target="_blank" class="underline text-blue-400 font-semibold">View on Solscan</a>`
+          `<a href="https://solscan.io/tx/${txid}" target="_blank" class="underline text-[var(--foreground)] font-semibold">View on Solscan</a>`
         );
       }
     } catch (error) {
@@ -148,35 +148,34 @@ export default function SwapForm() {
   return (
     <>
       {isProcessing && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-black text-white px-6 py-6 rounded-2xl shadow-xl text-center animate-pulse max-w-sm">
+        <div className="fixed inset-0 z-50 bg-[var(--background)]/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-[var(--background)] text-[var(--foreground)] px-6 py-6 rounded-2xl shadow-xl text-center animate-pulse max-w-sm">
             <div className="text-2xl font-bold mb-2">🛠️ Processing your swap...</div>
-            <div className="text-sm text-gray-400">Please wait a moment... 🔄</div>
+            <div className="text-sm text-[var(--foreground)]/60">Please wait a moment... 🔄</div>
           </div>
         </div>
       )}
 
-      <div className="bg-gray-900 shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-xl mx-auto relative border border-gray-600">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Token Swap</h2>
+      <div className="bg-[var(--background)] shadow-xl rounded-2xl p-6 md:p-10 w-full max-w-xl mx-auto relative border border-[var(--border)]">
+        <h2 className="text-2xl font-bold text-[var(--foreground)] mb-6 text-center">Token Swap</h2>
 
         {successMessage && (
           <div
             ref={messageRef}
-            className="bg-green-100 border border-green-400 text-green-800 px-4 py-4 rounded-xl mb-6 text-sm animate-fade-in"
+            className="bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)] px-4 py-4 rounded-xl mb-6 text-sm animate-fade-in"
           >
             <div dangerouslySetInnerHTML={{ __html: successMessage.replace(/\n/g, '<br />') }} />
           </div>
         )}
 
-        {/* From Field */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-white mb-1">From</label>
-          <div className="flex justify-between items-center border border-gray-500 rounded-xl px-4 py-3 bg-gray-800">
-            <span className="font-bold text-green-400">{fromToken}</span>
+          <label className="block text-sm font-medium text-[var(--foreground)] mb-1">From</label>
+          <div className="flex justify-between items-center border border-[var(--border)] rounded-xl px-4 py-3 bg-[var(--background)]/80">
+            <span className="font-bold text-[var(--foreground)]">{fromToken}</span>
             <input
               type="text"
               placeholder="0.00"
-              className="bg-transparent text-right text-green-400 text-3xl font-bold w-full ml-4 focus:outline-none tracking-widest"
+              className="bg-transparent text-right text-[var(--foreground)] text-3xl font-bold w-full ml-4 focus:outline-none tracking-widest"
               value={amount}
               onChange={handleInputChange}
               disabled={loading}
@@ -187,19 +186,18 @@ export default function SwapForm() {
         <div className="flex justify-center my-4">
           <button
             onClick={handleSwap}
-            className="text-white hover:text-green-400 text-lg font-medium flex items-center gap-2"
+            className="text-[var(--foreground)] hover:opacity-80 text-lg font-medium flex items-center gap-2"
             disabled={loading}
           >
             🔁 Swap Tokens
           </button>
         </div>
 
-        {/* To Field */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-white mb-1">To</label>
-          <div className="flex justify-between items-center border border-gray-500 rounded-xl px-4 py-3 bg-gray-800">
-            <span className="font-bold text-green-400">{toToken}</span>
-            <div className="text-right text-green-400 text-3xl font-bold w-full ml-4 tracking-widest">
+          <label className="block text-sm font-medium text-[var(--foreground)] mb-1">To</label>
+          <div className="flex justify-between items-center border border-[var(--border)] rounded-xl px-4 py-3 bg-[var(--background)]/80">
+            <span className="font-bold text-[var(--foreground)]">{toToken}</span>
+            <div className="text-right text-[var(--foreground)] text-3xl font-bold w-full ml-4 tracking-widest">
               {loading ? '...' : quoteAmount}
             </div>
           </div>
@@ -208,7 +206,7 @@ export default function SwapForm() {
         <button
           disabled={!amount || parseFloat(parseFormattedNumber(amount)) <= 0 || !quote || loading}
           onClick={executeSwap}
-          className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white text-lg font-semibold py-3 rounded-full hover:from-green-600 hover:to-green-700 transition disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-[var(--foreground)] to-[var(--foreground)] text-[var(--background)] text-lg font-semibold py-3 rounded-full hover:opacity-90 transition disabled:opacity-50"
         >
           {loading
             ? toToken === 'LBXO'

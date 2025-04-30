@@ -11,7 +11,7 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="w-full bg-black shadow-md px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-2 sm:gap-0 relative">
+    <nav className="w-full bg-[var(--background)] shadow-md px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-2 sm:gap-0 relative text-[var(--foreground)]">
       
       {/* Logo que abre o menu */}
       <div className="flex items-center">
@@ -27,9 +27,9 @@ export default function NavBar() {
       </div>
 
       {/* Links de navegação (desktop) */}
-      <div className="hidden sm:flex flex-wrap gap-4 text-sm justify-center">
-        <Link href="/" className="hover:text-primary text-white transition">Home</Link>
-        <Link href="/whitepaper" className="hover:text-primary text-white transition">Whitepaper</Link>
+      <div className="hidden sm:flex flex-wrap gap-6 text-base sm:text-lg justify-center">
+        <Link href="/" className="hover:text-primary text-[var(--foreground)] transition">Home</Link>
+        <Link href="/whitepaper" className="hover:text-primary text-[var(--foreground)] transition">Whitepaper</Link>
       </div>
 
       {/* Botões lado a lado */}
@@ -53,11 +53,23 @@ export default function NavBar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="absolute top-20 left-4 right-4 bg-black rounded-xl shadow-lg p-4 flex flex-col gap-4 sm:hidden z-50"
+            className="absolute top-20 left-4 right-4 bg-[var(--background)] text-[var(--foreground)] rounded-xl shadow-lg p-4 flex flex-col gap-6 sm:hidden z-50 text-base"
           >
-            <Link href="/" className="hover:text-primary text-white transition" onClick={() => setMenuOpen(false)}>Home</Link>
-            <Link href="/whitepaper" className="hover:text-primary text-white transition" onClick={() => setMenuOpen(false)}>Whitepaper</Link>
-            {/* Você pode adicionar mais links aqui no futuro */}
+            <Link
+              href="/"
+              className="hover:text-primary text-[var(--foreground)] transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/whitepaper"
+              className="hover:text-primary text-[var(--foreground)] transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              Whitepaper
+            </Link>
+            {/* New Links here */}
           </motion.div>
         )}
       </AnimatePresence>
