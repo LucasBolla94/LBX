@@ -40,7 +40,7 @@ export default function AirdropReg() {
 
   const handleRegister = async () => {
     if (!publicKey) {
-      alert("Connect your wallet first.");
+      alert("Please connect your wallet first.");
       return;
     }
 
@@ -59,20 +59,20 @@ export default function AirdropReg() {
       setRefferCode(newRefferCode);
     } catch (error) {
       console.error("Error registering wallet:", error);
-      alert("There was an error registering. Please try again.");
+      alert("There was an error during registration. Please try again.");
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-6 bg-[var(--background)] border border-[var(--border)] rounded-3xl shadow-lg">
       <h2 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[var(--foreground)] via-[var(--foreground)] to-[var(--foreground)] text-transparent bg-clip-text text-center mb-6 leading-snug">
-        🎁 Refer Reward
+        🎁 Refer and Earn
       </h2>
 
       <p className="text-[var(--foreground)] text-base sm:text-lg text-center mb-6 leading-relaxed max-w-3xl">
-        Convide um amigo para a comunidade e ganhe <strong>$LBXO</strong> como recompensa por ajudar o projeto a crescer. 
+        Invite a friend to our community and earn <strong>$LBXO</strong> as a reward for helping grow the project. 
         <br className="hidden sm:block" />
-        Ao combinar seus resultados com o <strong>Stake</strong>, você poderá multiplicar seus ganhos em <strong>LBXO</strong>, <strong>SOL</strong> e <strong>USDC</strong>!
+        Combine your referral rewards with <strong>Staking</strong> to multiply your earnings in <strong>LBXO</strong>, <strong>SOL</strong>, and <strong>USDC</strong>!
       </p>
 
       <div className="flex flex-col items-center gap-3 text-center mb-6">
@@ -82,10 +82,10 @@ export default function AirdropReg() {
           rel="noopener noreferrer"
           className="text-[var(--foreground)] hover:opacity-80 font-semibold underline text-base sm:text-lg"
         >
-          📢 Entre no nosso canal do Telegram para ver a tabela de recompensas
+          📢 Join our Telegram channel to see the reward table
         </a>
         <p className="text-[var(--foreground)]/70 text-sm sm:text-base leading-relaxed max-w-lg">
-          Você poderá acompanhar seus ganhos a qualquer momento pelo Dashboard após o registro.
+          You will be able to track your earnings at any time through the Dashboard after registering.
         </p>
       </div>
 
