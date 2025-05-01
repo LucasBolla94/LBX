@@ -50,7 +50,7 @@ export default function AirDropAmount() {
 
   useEffect(() => {
     fetchLBXOBalance();
-    const intervalId = window.setInterval(fetchLBXOBalance, 15_000);
+    const intervalId = window.setInterval(fetchLBXOBalance, 15000);
     return () => window.clearInterval(intervalId);
   }, []);
 
@@ -65,9 +65,13 @@ export default function AirDropAmount() {
 
   return (
     <div className="w-full max-w-md sm:max-w-lg mx-auto p-6 bg-[var(--background)] border border-[var(--border)] rounded-3xl shadow-2xl flex flex-col items-center text-center">
-      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[var(--foreground)] mb-4">
+      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[var(--foreground)] mb-2">
         Balance from Official Rewards Wallet
       </h3>
+
+      <p className="text-[var(--foreground)] text-xs sm:text-sm break-all mb-4">
+        {WALLET_ADDRESS}
+      </p>
 
       {loading ? (
         <p className="text-[var(--foreground)] text-base sm:text-lg animate-pulse">
