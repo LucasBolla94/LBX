@@ -6,6 +6,7 @@ import { db } from '@/app/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import BtnWithdraw from '@/components/dash/BtnWithdraw';
 import RefLink from '@/components/dash/RefLink'; // Importa o RefLink
+import WithdrawTime from '@/components/dash/WithdrawTime'; // Importa o componente de contagem regressiva
 
 export default function RewardAirDrop() {
   const wallet = useWallet();
@@ -108,7 +109,10 @@ export default function RewardAirDrop() {
   
           {/* Link de Referência */}
           {refferCode && <RefLink refferCode={refferCode} />}
-  
+
+          {/* Count to Withdraw */}
+          <WithdrawTime />
+
           {/* Botão Withdraw */}
           <div className="flex flex-col items-center">
             <BtnWithdraw reward={balance || 0} disabled={payRequest || (balance || 0) < 500} />
