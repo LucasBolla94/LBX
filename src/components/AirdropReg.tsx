@@ -97,7 +97,7 @@ export default function AirdropReg() {
             onClick={handleRegister}
             className="w-full max-w-sm px-6 py-3 bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 rounded-full font-semibold text-lg transition"
           >
-            Registrar e Gerar Meu Link de Recompensa
+            Sign Up and Get My Reward Link
           </button>
         )
       )}
