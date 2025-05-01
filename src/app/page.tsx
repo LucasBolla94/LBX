@@ -8,22 +8,24 @@ import PriceLbx from '@/components/PriceLbx';
 
 export default function Home() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
-      {/* Seção combinada com Stake e Swap lado a lado */}
-      <section className="flex flex-col md:flex-row items-center gap-10 px-4 md:px-20 py-16">
-        <div className="md:w-1/2">
+    <div className="min-h-screen bg-[var(--background)]">
+      {/* Preço centralizado no topo */}
+      <section className="w-full px-4 sm:px-6 lg:px-20 py-8 max-w-screen-xl mx-auto">
+        <PriceLbx />
+      </section>
+  
+      {/* Intro + Swap lado a lado no desktop, empilhados no mobile */}
+      <section className="w-full px-4 sm:px-6 lg:px-20 py-10 sm:py-16 max-w-screen-xl mx-auto flex flex-col lg:flex-row lg:justify-between gap-10">
+        <div className="w-full lg:w-1/2">
           <IntroSection />
         </div>
-        <div className="md:w-1/2">
+        <div className="w-full lg:w-1/2">
           <SwapForm />
         </div>
-        <div>
-          <PriceLbx />
-        </div>
       </section>
-
-      {/* Estatísticas do projeto */}
+  
+      {/* Estatísticas abaixo */}
       <StatsSection />
     </div>
   );
-}
+}  

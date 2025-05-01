@@ -41,31 +41,33 @@ export default function PriceLbx() {
   }, []);
 
   return (
-    <section className="bg-[var(--background)] py-6 px-4 md:px-20">
-      <div className="bg-[var(--background)] border border-[var(--border)] rounded-2xl shadow-sm max-w-3xl mx-auto px-6 py-10 flex items-center justify-between gap-4">
+    <section className="w-full px-4 sm:px-6 lg:px-20 py-8 bg-[var(--background)]">
+      <div className="w-full max-w-3xl mx-auto bg-[var(--background)] border border-[var(--border)] rounded-2xl shadow-md px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
         {/* Ícone + Token */}
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-[var(--border)] flex items-center justify-center text-[var(--foreground)] text-xl shadow-inner">
+          <div className="w-14 h-14 rounded-full bg-[var(--border)] flex items-center justify-center text-[var(--foreground)] text-2xl shadow-inner">
             💰
           </div>
           <div>
-            <p className="font-semibold text-lg px-2 text-[var(--foreground)]">$LBXO</p>
+            <p className="font-semibold text-lg sm:text-xl text-[var(--foreground)]">$LBXO</p>
           </div>
         </div>
 
         {/* Valor */}
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-center sm:items-end">
           {error ? (
-            <p className="text-[var(--foreground)] font-semibold text-base">Error</p>
+            <p className="text-[var(--foreground)] font-semibold text-base sm:text-lg">Error</p>
           ) : price !== null ? (
-            <p className="text-3xl font-bold text-[var(--foreground)] tracking-widest">
+            <p className="text-3xl sm:text-4xl font-bold text-[var(--foreground)] tracking-widest">
               ${price.toFixed(6)}
             </p>
           ) : (
-            <p className="text-base text-[var(--foreground)]/70 italic">Loading...</p>
+            <p className="text-base sm:text-lg text-[var(--foreground)]/70 italic">Loading...</p>
           )}
           {timestamp && !error && (
-            <p className="text-xs text-[var(--foreground)]/60 mt-1">Update at {timestamp}</p>
+            <p className="text-xs sm:text-sm text-[var(--foreground)]/60 mt-1">
+              Update at {timestamp}
+            </p>
           )}
         </div>
       </div>

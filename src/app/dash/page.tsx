@@ -26,9 +26,7 @@ export default function DashPage() {
       try {
         const response = await fetch(RPC, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             jsonrpc: '2.0',
             id: 1,
@@ -36,7 +34,7 @@ export default function DashPage() {
             params: [
               wallet.publicKey.toBase58(),
               { mint: MINT_LBXO.toBase58() },
-              { encoding: "jsonParsed" }
+              { encoding: 'jsonParsed' },
             ],
           }),
         });
@@ -75,7 +73,7 @@ export default function DashPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-black text-white">
+      <div className="flex justify-center items-center h-screen bg-[var(--background)] text-[var(--foreground)]">
         Loading...
       </div>
     );
@@ -83,7 +81,7 @@ export default function DashPage() {
 
   if (!wallet.connected) {
     return (
-      <div className="flex justify-center items-center h-screen bg-black text-white">
+      <div className="flex justify-center items-center h-screen bg-[var(--background)] text-[var(--foreground)]">
         Please connect your wallet.
       </div>
     );
@@ -94,35 +92,38 @@ export default function DashPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 py-8">
-      {/* Header do Painel */}
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 sm:px-6 py-10">
+      {/* Cabeçalho do Painel */}
       <div className="text-center mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-green-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
+        <h1 className="text-3xl sm:text-4xl font-bold text-[var(--foreground)]">
           🧑‍💻 LBXO Dashboard
         </h1>
-        <p className="text-gray-400 mt-2 text-sm sm:text-base">
+        <p className="mt-2 text-sm sm:text-base text-[var(--foreground)]/70">
           Manage your portfolio, rewards, and community votes.
         </p>
       </div>
-
-      {/* Painel Principal */}
-      <div className="flex flex-col gap-10 items-center">
+  
+      {/* Conteúdo principal */}
+      <div className="flex flex-col gap-10 items-center w-full">
         
-        {/* Portfolio (LBXO balance e valor) */}
-        <Portfolio />
-
-        {/* Reward AirDrop (Recompensas de Referidos) */}
-        <RewardAirDrop />
-
-        {/* Votações (abertas e futuras) */}
-        <div className="w-full max-w-7xl mx-auto px-2 sm:px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-6 bg-gradient-to-r from-green-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
+        {/* Portfolio */}
+        <div className="w-full max-w-4xl px-2 sm:px-4">
+          <Portfolio />
+        </div>
+  
+        {/* Recompensas de Referência */}
+        <div className="w-full max-w-4xl px-2 sm:px-4">
+          <RewardAirDrop />
+        </div>
+  
+        {/* Seção de Votação */}
+        <div className="w-full max-w-7xl px-2 sm:px-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[var(--foreground)] mb-6">
             📢 Community Votes
           </h2>
           <PoolVote />
         </div>
-
       </div>
     </div>
   );
-}
+}  

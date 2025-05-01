@@ -87,30 +87,41 @@ export default function Portfolio() {
   const portfolioValue = price !== null ? balance * price : 0;
 
   return (
-    <section className="w-full max-w-4xl mx-auto p-6 sm:p-8 bg-black rounded-3xl shadow-lg border border-green-500 flex flex-col gap-6">
-      <h2 className="text-2xl sm:text-3xl font-bold text-green-400 text-center">📈 Your Portfolio</h2>
-
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-8">
-        <div className="flex flex-col items-center">
-          <p className="text-lg text-gray-400">Your Balance</p>
+    <section className="w-full max-w-4xl mx-auto p-6 sm:p-8 bg-[var(--background)] rounded-3xl shadow-lg border border-[var(--border)] flex flex-col gap-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--foreground)]">
+        📈 Your Portfolio
+      </h2>
+  
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-10 sm:gap-8">
+        {/* Balance */}
+        <div className="flex flex-col items-center text-center">
+          <p className="text-base sm:text-lg text-[var(--foreground)]/70">Your Balance</p>
           {loadingBalance ? (
-            <p className="text-white text-3xl font-bold animate-pulse">Loading...</p>
+            <p className="text-[var(--foreground)] text-3xl font-bold animate-pulse">Loading...</p>
           ) : (
-            <p className="text-green-300 text-4xl font-extrabold">{balance.toLocaleString()} <span className="text-green-500">$LBXO</span></p>
+            <p className="text-3xl sm:text-4xl font-extrabold text-[var(--foreground)]">
+              {balance.toLocaleString()}
+              <span className="text-[var(--foreground)]/70 text-lg ml-1">$LBXO</span>
+            </p>
           )}
         </div>
-
-        <div className="flex flex-col items-center">
-          <p className="text-lg text-gray-400">Value in USDC</p>
+  
+        {/* Value */}
+        <div className="flex flex-col items-center text-center">
+          <p className="text-base sm:text-lg text-[var(--foreground)]/70">Value in USDC</p>
           {loadingPrice || loadingBalance ? (
-            <p className="text-white text-3xl font-bold animate-pulse">Loading...</p>
+            <p className="text-[var(--foreground)] text-3xl font-bold animate-pulse">Loading...</p>
           ) : (
-            <p className="text-green-300 text-4xl font-extrabold">${portfolioValue.toFixed(2)}</p>
+            <p className="text-3xl sm:text-4xl font-extrabold text-[var(--foreground)]">
+              ${portfolioValue.toFixed(2)}
+            </p>
           )}
         </div>
       </div>
-
-      <p className="text-xs text-center text-gray-600 mt-4">Data updates automatically every 30 seconds</p>
+  
+      <p className="text-xs text-center text-[var(--foreground)]/50 mt-2">
+        Data updates automatically every 30 seconds
+      </p>
     </section>
   );
 }

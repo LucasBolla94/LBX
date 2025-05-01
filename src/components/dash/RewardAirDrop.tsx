@@ -70,40 +70,51 @@ export default function RewardAirDrop() {
   }, [wallet.connected, wallet.publicKey]);
 
   return (
-    <section className="w-full max-w-md mx-auto bg-black border border-green-500 rounded-3xl p-6 flex flex-col items-center shadow-lg">
-      <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-400 via-purple-500 to-green-400 text-transparent bg-clip-text mb-6">
-        🎁 AirDrop Reward
+    <section className="w-full max-w-md mx-auto bg-[var(--background)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 flex flex-col items-center shadow-lg">
+      <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--foreground)] mb-6">
+        🎁  Rewards
       </h2>
-
+  
       {loading ? (
-        <p className="text-white animate-pulse">Loading...</p>
+        <p className="text-[var(--foreground)] animate-pulse text-base sm:text-lg">Loading...</p>
       ) : (
         <>
-          <p className="text-gray-400 text-lg mb-2">New Users Referred:</p>
-          <p className="text-green-400 text-4xl font-bold">{newUsers}</p>
-
-          <div className="my-6 w-full h-px bg-gradient-to-r from-green-400 via-purple-500 to-green-400" />
-
-          <p className="text-gray-400 text-lg mb-2">Total Already Withdrawn</p>
-          <p className="text-green-300 text-5xl font-extrabold">{reward.toLocaleString()} $LBXO</p>
-
+          <p className="text-[var(--foreground)]/70 text-base sm:text-lg mb-2 text-center">
+            New Users Referred:
+          </p>
+          <p className="text-[var(--foreground)] text-3xl sm:text-4xl font-bold">{newUsers}</p>
+  
+          <div className="my-6 w-full h-px bg-[var(--border)]" />
+  
+          <p className="text-[var(--foreground)]/70 text-base sm:text-lg mb-2 text-center">
+            Total Already Withdrawn
+          </p>
+          <p className="text-[var(--foreground)] text-4xl sm:text-5xl font-extrabold text-center">
+            {reward.toLocaleString()} $LBXO
+          </p>
+  
           <div className="mt-6" />
-          <p className="text-gray-400 text-lg mb-2">Total Available to Withdraw:</p>
-          <p className="text-green-300 text-4xl font-bold">{balance?.toLocaleString() || 0} $LBXO</p>
-
-          <p className="text-xs text-gray-500 mt-6 mb-4">
+  
+          <p className="text-[var(--foreground)]/70 text-base sm:text-lg mb-2 text-center">
+            Total Available to Withdraw:
+          </p>
+          <p className="text-[var(--foreground)] text-3xl sm:text-4xl font-bold text-center">
+            {balance?.toLocaleString() || 0} $LBXO
+          </p>
+  
+          <p className="text-xs text-[var(--foreground)]/50 mt-6 mb-4 text-center">
             Rewards update automatically as new users join.
           </p>
-
-          {/* AQUI você chama o componente RefLink */}
+  
+          {/* Link de Referência */}
           {refferCode && <RefLink refferCode={refferCode} />}
-
+  
           {/* Botão Withdraw */}
           <div className="flex flex-col items-center">
             <BtnWithdraw reward={balance || 0} disabled={payRequest || (balance || 0) < 500} />
-
+  
             {withdrawRequested && (
-              <div className="mt-4 text-green-400 text-sm bg-green-900 bg-opacity-30 rounded-xl px-4 py-2 shadow-md animate-pulse">
+              <div className="mt-4 text-[var(--foreground)] text-sm border border-[var(--border)] bg-[var(--background)]/50 rounded-xl px-4 py-2 shadow-md text-center">
                 🎉 Withdrawal Request Successful! We’ll process it soon.
               </div>
             )}
@@ -112,4 +123,4 @@ export default function RewardAirDrop() {
       )}
     </section>
   );
-}
+}  

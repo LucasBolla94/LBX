@@ -49,11 +49,15 @@ export default function BtnWithdraw({ reward, disabled }: BtnWithdrawProps) {
 
   return (
     <button
-      onClick={handleWithdraw}
-      className="mt-4 px-6 py-2 rounded-full bg-gradient-to-r from-green-400 via-purple-500 to-green-400 text-black font-bold shadow-md hover:opacity-90 transition disabled:opacity-50"
-      disabled={reward <= 0 || loading || disabled} // Aqui agora considera também o disabled externo
-    >
-      {loading ? 'Processing...' : disabled ? 'Withdrawal Requested' : 'Withdraw'}
-    </button>
+  onClick={handleWithdraw}
+  className="w-full sm:w-auto mt-4 px-6 py-2 rounded-full bg-[var(--foreground)] text-[var(--background)] border border-[var(--border)] font-bold shadow-md hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+  disabled={reward <= 0 || loading || disabled}
+>
+  {loading
+    ? 'Processing...'
+    : disabled
+      ? 'Withdrawal Requested'
+      : 'Withdraw'}
+</button>
   );
-}
+}  
