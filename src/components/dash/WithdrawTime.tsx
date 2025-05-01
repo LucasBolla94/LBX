@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 const PAY_HOURS = [8, 14, 20]; // Horários de pagamento em 24h
-const API_PATH = '/api/server-time'; // A rota criada acima
+const API_PATH = '/api/server-time'; // A rota criada no App Router
 
 export default function WithdrawTime() {
   const [countdown, setCountdown] = useState<string>('Loading...');
@@ -15,18 +15,17 @@ export default function WithdrawTime() {
     const month = now.getMonth();
     const day = now.getDate();
 
-    for (let h of PAY_HOURS) {
-      const dt = new Date(year, month, day, h, 0, 0);
+    for (const hour of PAY_HOURS) {
+      const dt = new Date(year, month, day, hour, 0, 0);
       if (dt.getTime() > now.getTime()) {
-        setTargetHour(h);
+        setTargetHour(hour);
         return dt;
       }
     }
 
     // Se todos passaram, pega o primeiro do dia seguinte
-    const tomorrow = new Date(year, month, day + 1, PAY_HOURS[0], 0, 0);
     setTargetHour(PAY_HOURS[0]);
-    return tomorrow;
+    return new Date(year, month, day + 1, PAY_HOURS[0], 0, 0);
   };
 
   useEffect(() => {
@@ -36,6 +35,7 @@ export default function WithdrawTime() {
     const initCountdown = async () => {
       try {
         const res = await fetch(API_PATH);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const { now } = await res.json();
         let serverNow = new Date(now);
 
@@ -43,22 +43,23 @@ export default function WithdrawTime() {
         let next = getNextPayout(serverNow);
         let diffMs = next.getTime() - serverNow.getTime();
 
-        // Formata e começa o intervalo
+        // Função de tick
         const tick = () => {
           if (diffMs <= 0) {
-            // Recalcula quando zerar
+            // Avança para o próximo segundo
             serverNow = new Date(serverNow.getTime() + (1000 - (diffMs % 1000)));
             next = getNextPayout(serverNow);
             diffMs = next.getTime() - serverNow.getTime();
           }
           const totalSec = Math.max(0, Math.floor(diffMs / 1000));
-          const h = Math.floor(totalSec / 3600);
-          const m = Math.floor((totalSec % 3600) / 60);
-          const s = totalSec % 60;
+          const hours = Math.floor(totalSec / 3600);
+          const mins = Math.floor((totalSec % 3600) / 60);
+          const secs = totalSec % 60;
+
           setCountdown(
-            `${h.toString().padStart(2, '0')}:` +
-            `${m.toString().padStart(2, '0')}:` +
-            `${s.toString().padStart(2, '0')}`
+            `${hours.toString().padStart(2, '0')}:` +
+            `${mins.toString().padStart(2, '0')}:` +
+            `${secs.toString().padStart(2, '0')}`
           );
           diffMs -= 1000;
         };
