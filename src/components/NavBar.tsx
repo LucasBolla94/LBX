@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,44 +9,61 @@ import DashboardAccessButton from './DashboardAccessButton';
 
 export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--background', isDarkMode ? '#000000' : '#ffffff');
+    root.style.setProperty('--foreground', isDarkMode ? '#ffffff' : '#000000');
+    root.style.setProperty('--border', isDarkMode ? '#333333' : '#cccccc');
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   return (
     <nav className="w-full bg-[var(--background)] shadow-md px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-2 sm:gap-0 relative text-[var(--foreground)]">
-      
-      {/* Logo que abre o menu */}
+
+      {/* Logo */}
       <div className="flex items-center">
         <button onClick={() => setMenuOpen(!menuOpen)} className="focus:outline-none">
-          <Image
-            src="/logo.png"
-            alt="LBX Logo"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
+          <Image src="/logo.png" alt="LBX Logo" width={40} height={40} className="rounded-full" />
         </button>
       </div>
 
-      {/* Links de navegação (desktop) */}
+      {/* Links desktop */}
       <div className="hidden sm:flex flex-wrap gap-6 text-base sm:text-lg justify-center">
         <Link href="/" className="hover:text-primary text-[var(--foreground)] transition">Home</Link>
         <Link href="/whitepaper" className="hover:text-primary text-[var(--foreground)] transition">Whitepaper</Link>
         <Link href="/promo" className="hover:text-primary text-[var(--foreground)] transition">Rewards</Link>
       </div>
 
-      {/* Botões lado a lado */}
+      {/* Ações (botões + switch) */}
       <div className="flex items-center justify-center gap-4">
-        {/* Versão normal no PC */}
+        {/* Switch de tema */}
+        <div className="hidden sm:flex items-center gap-2">
+          <span className="text-xl">{isDarkMode ? '🌙' : '🌞'}</span>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" checked={isDarkMode} onChange={toggleTheme} className="sr-only peer" />
+            <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500 transition-all duration-300" />
+            <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all peer-checked:translate-x-full" />
+          </label>
+        </div>
+
+        {/* Botão Dashboard */}
         <div className="hidden sm:block">
           <DashboardAccessButton />
         </div>
-        {/* Versão minimal no mobile */}
+
+        {/* Botão Dashboard minimal no mobile */}
         <div className="sm:hidden">
           <DashboardAccessButton minimal />
         </div>
+
+        {/* Wallet */}
         <WalletButton />
       </div>
 
-      {/* Menu aberto no mobile com animação */}
+      {/* Menu mobile */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -56,28 +73,9 @@ export default function NavBar() {
             transition={{ duration: 0.3 }}
             className="absolute top-20 left-4 right-4 bg-[var(--background)] text-[var(--foreground)] rounded-xl shadow-lg p-4 flex flex-col gap-6 sm:hidden z-50 text-base"
           >
-            <Link
-              href="/"
-              className="hover:text-primary text-[var(--foreground)] transition"
-              onClick={() => setMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/whitepaper"
-              className="hover:text-primary text-[var(--foreground)] transition"
-              onClick={() => setMenuOpen(false)}
-            >
-              Whitepaper
-            </Link>
-            <Link
-              href="/promo"
-              className="hover:text-primary text-[var(--foreground)] transition"
-              onClick={() => setMenuOpen(false)}
-            >
-              Rewards
-            </Link>
-            {/* New Links here */}
+            <Link href="/" onClick={() => setMenuOpen(false)} className="hover:text-primary transition">Home</Link>
+            <Link href="/whitepaper" onClick={() => setMenuOpen(false)} className="hover:text-primary transition">Whitepaper</Link>
+            <Link href="/promo" onClick={() => setMenuOpen(false)} className="hover:text-primary transition">Rewards</Link>
           </motion.div>
         )}
       </AnimatePresence>
