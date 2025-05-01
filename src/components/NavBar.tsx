@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import WalletButton from './WalletButton';
 import DashboardAccessButton from './DashboardAccessButton';
+import VisitCounter from './Count'; // ✅ Importação do contador
 
 export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,6 +35,7 @@ export default function NavBar() {
 
   return (
     <nav className="w-full bg-[var(--background)] shadow-md px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-2 sm:gap-0 relative text-[var(--foreground)]">
+      <VisitCounter /> {/* ✅ Contador posicionado no topo da página */}
 
       {/* Logo */}
       <div className="flex items-center">

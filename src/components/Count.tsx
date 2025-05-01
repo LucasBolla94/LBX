@@ -13,8 +13,11 @@ import {
   addDoc
 } from 'firebase/firestore';
 
+// Chave no localStorage para armazenar o timestamp da última visita
 const VISIT_KEY = 'lbx-visit-timestamp';
-const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
+
+// Intervalo de 3 horas em milissegundos
+const THREE_HOURS_MS = 3 * 60 * 60 * 1000;
 
 export default function VisitCounter() {
   useEffect(() => {
@@ -23,8 +26,8 @@ export default function VisitCounter() {
         const now = Date.now();
         const lastVisit = localStorage.getItem(VISIT_KEY);
 
-        // Se já visitou nas últimas 6h, não conta de novo
-        if (lastVisit && now - parseInt(lastVisit, 10) < SIX_HOURS_MS) {
+        // Se já visitou nas últimas 3 horas, não conta de novo
+        if (lastVisit && now - parseInt(lastVisit, 10) < THREE_HOURS_MS) {
           return;
         }
 
@@ -32,7 +35,7 @@ export default function VisitCounter() {
         const snapshot = await getDoc(totalRef);
 
         if (!snapshot.exists()) {
-          // Cria com valor inicial e timestamp
+          // Primeiro registro: cria o documento com valor inicial = 1
           await setDoc(totalRef, {
             value: 1,
             updatedAt: serverTimestamp(),
@@ -40,12 +43,13 @@ export default function VisitCounter() {
         } else {
           const currentValue = snapshot.data().value;
           if (typeof currentValue === 'number') {
+            // Incrementa o contador
             await updateDoc(totalRef, {
               value: increment(1),
               updatedAt: serverTimestamp(),
             });
           } else {
-            // Corrige valor corrompido
+            // Corrige valor caso esteja corrompido
             await setDoc(
               totalRef,
               { value: 1, updatedAt: serverTimestamp() },
@@ -54,15 +58,15 @@ export default function VisitCounter() {
           }
         }
 
-        // Adiciona um documento de log em 'visit-count-logs' para facilitar visualização
+        // Adiciona um log para auditoria
         await addDoc(collection(db, 'visit-count-logs'), {
           timestamp: serverTimestamp(),
         });
 
-        // Salva timestamp local para limitar visitas
+        // Atualiza timestamp da última visita no storage
         localStorage.setItem(VISIT_KEY, now.toString());
       } catch (error) {
-        console.error('Failed to count visit:', error);
+        console.error('Falha ao registrar visita:', error);
       }
     };
 
