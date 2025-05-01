@@ -9,13 +9,25 @@ import DashboardAccessButton from './DashboardAccessButton';
 
 export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false); // modo claro por padrão
 
+  // Recupera o tema salvo no localStorage ao carregar
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setIsDarkMode(savedTheme === 'dark');
+    }
+  }, []);
+
+  // Aplica as cores e salva o tema no localStorage
   useEffect(() => {
     const root = document.documentElement;
+
     root.style.setProperty('--background', isDarkMode ? '#000000' : '#ffffff');
     root.style.setProperty('--foreground', isDarkMode ? '#ffffff' : '#000000');
     root.style.setProperty('--border', isDarkMode ? '#333333' : '#cccccc');
+
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
@@ -39,17 +51,22 @@ export default function NavBar() {
 
       {/* Ações (botões + switch) */}
       <div className="flex items-center justify-center gap-4">
-        {/* Switch de tema */}
-        <div className="hidden sm:flex items-center gap-2">
-          <span className="text-xl">{isDarkMode ? '🌙' : '🌞'}</span>
+        {/* Switch de tema visível em todas as telas */}
+        <div className="flex items-center gap-2">
+          <span className="text-xl sm:text-base">{isDarkMode ? '🌙' : '🌞'}</span>
           <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" checked={isDarkMode} onChange={toggleTheme} className="sr-only peer" />
+            <input
+              type="checkbox"
+              checked={isDarkMode}
+              onChange={toggleTheme}
+              className="sr-only peer"
+            />
             <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500 transition-all duration-300" />
             <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all peer-checked:translate-x-full" />
           </label>
         </div>
 
-        {/* Botão Dashboard */}
+        {/* Botão Dashboard completo em desktop */}
         <div className="hidden sm:block">
           <DashboardAccessButton />
         </div>
