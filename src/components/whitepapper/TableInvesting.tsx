@@ -38,6 +38,17 @@ export default function TableInvesting() {
         </div>
       </div>
 
+      {/* Section Title + Description */}
+      <div className="max-w-2xl mx-auto text-center mb-6 px-4">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4">
+          📊 Capital Allocation – LBX Group
+        </h1>
+        <p className="text-base leading-relaxed text-[var(--foreground)]">
+          Every contribution received by the project wallet (NFT sales, donations, or external capital)
+          is allocated using the following strategy to ensure security, diversification, and long-term growth:
+        </p>
+      </div>
+
       {/* Allocation Table */}
       <div className="inline-block min-w-full max-w-2xl mx-auto align-middle border border-[var(--border)] rounded-lg overflow-hidden">
         <table className="min-w-full text-[var(--foreground)] text-sm sm:text-base">
