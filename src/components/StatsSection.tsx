@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Holders from './Holders';
+import Supply from './Supply';
 import { FaChartPie, FaLock, FaLeaf, FaUsers } from 'react-icons/fa';
 
 export default function StatsSection() {
@@ -12,7 +13,7 @@ export default function StatsSection() {
         {/* Total Supply */}
         <div className="flex flex-col items-center">
           <FaChartPie className="text-2xl sm:text-3xl mb-2 text-purple-500" />
-          <p className="font-bold text-lg sm:text-xl">50M $LBXO</p>
+          <Supply />
           <p className="text-sm text-[var(--foreground)]/70">Total Supply</p>
         </div>
 

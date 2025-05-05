@@ -20,7 +20,6 @@ export default function Portfolio() {
     const fetchBalance = async () => {
       if (!wallet.publicKey) return;
       setLoadingBalance(true);
-
       try {
         const response = await fetch(RPC, {
           method: 'POST',
@@ -36,16 +35,9 @@ export default function Portfolio() {
             ],
           }),
         });
-
         const data = await response.json();
-
-        if (data.result?.value?.length > 0) {
-          const tokenAccount = data.result.value[0];
-          const uiAmount = tokenAccount.account.data.parsed.info.tokenAmount.uiAmount || 0;
-          setBalance(uiAmount);
-        } else {
-          setBalance(0);
-        }
+        const uiAmount = data.result?.value?.[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
+        setBalance(uiAmount);
       } catch (error) {
         console.error('Error fetching LBXO balance:', error);
         setBalance(0);
@@ -66,7 +58,6 @@ export default function Portfolio() {
         const url = `https://lite-api.jup.ag/swap/v1/quote?inputMint=${LBX_MINT}&outputMint=${USDC_MINT}&amount=${amount}&slippageBps=50`;
         const res = await fetch(url);
         if (!res.ok) return;
-
         const data = await res.json();
         const usdcValue = Number(data.outAmount) / 10 ** 6;
         setPrice(usdcValue);
@@ -84,6 +75,38 @@ export default function Portfolio() {
 
   const portfolioValue = price !== null ? balance * price : 0;
 
+  const formatTokenValue = (value: number) => {
+    const [whole, decimal = ''] = value.toFixed(9).split('.');
+    const parts = whole.split(/(?=(?:\d{3})+(?!\d))/g); // quebra em milhar
+    return (
+      <span className="flex flex-wrap justify-center items-baseline gap-x-1">
+        {parts.map((part, i) => (
+          <span key={i} className="text-[clamp(1rem,2.5vw,1.6rem)] font-bold">
+            {part}
+          </span>
+        ))}
+        <span className="text-sm font-mono">.{decimal}</span>
+        <span className="text-sm font-semibold ml-1">$LBXO</span>
+      </span>
+    );
+  };
+
+  const formatUSDCValue = (value: number) => {
+    const [whole, decimal = ''] = value.toFixed(6).split('.');
+    const parts = whole.split(/(?=(?:\d{3})+(?!\d))/g);
+    return (
+      <span className="flex flex-wrap justify-center items-baseline gap-x-1 text-green-500">
+        <span className="text-sm font-semibold">$</span>
+        {parts.map((part, i) => (
+          <span key={i} className="text-[clamp(1rem,2.5vw,1.6rem)] font-bold">
+            {part}
+          </span>
+        ))}
+        <span className="text-sm font-mono">.{decimal}</span>
+      </span>
+    );
+  };
+
   return (
     <section className="w-full max-w-4xl mx-auto p-6 sm:p-10 bg-[var(--background)] border border-[var(--border)] rounded-3xl shadow-xl">
       {/* Header */}
@@ -91,7 +114,8 @@ export default function Portfolio() {
         <Image src="/shield.png" alt="$LBXO Logo" width={60} height={60} />
         <h1 className="text-2xl sm:text-3xl font-bold">Your LBXO Portfolio</h1>
         <p className="text-sm sm:text-base text-[var(--foreground)]/70 max-w-xl">
-          Track your total $LBXO balance and its current value in USDC. 
+          Track your total $LBXO balance and its current value in USDC.
+          <br className="hidden sm:block" />
           Updated live every 30 seconds based on Jupiter’s market price.
         </p>
       </div>
@@ -102,11 +126,9 @@ export default function Portfolio() {
         <div className="bg-[var(--border)]/10 border border-[var(--border)] rounded-xl p-6">
           <p className="text-sm sm:text-base mb-2 text-[var(--foreground)]/70">Token Balance</p>
           {loadingBalance ? (
-            <p className="text-3xl font-bold animate-pulse">Loading...</p>
+            <p className="text-xl sm:text-2xl font-bold animate-pulse">Loading...</p>
           ) : (
-            <p className="text-3xl font-extrabold">
-              {balance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-base font-medium">$LBXO</span>
-            </p>
+            formatTokenValue(balance)
           )}
         </div>
 
@@ -114,11 +136,9 @@ export default function Portfolio() {
         <div className="bg-[var(--border)]/10 border border-[var(--border)] rounded-xl p-6">
           <p className="text-sm sm:text-base mb-2 text-[var(--foreground)]/70">Estimated USDC Value</p>
           {loadingPrice || loadingBalance ? (
-            <p className="text-3xl font-bold animate-pulse">Loading...</p>
+            <p className="text-xl sm:text-2xl font-bold animate-pulse">Loading...</p>
           ) : (
-            <p className="text-3xl font-extrabold text-green-500">
-              ${portfolioValue.toFixed(2)}
-            </p>
+            formatUSDCValue(portfolioValue)
           )}
         </div>
       </div>
