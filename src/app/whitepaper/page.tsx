@@ -2,7 +2,6 @@ import TableInvesting from "@/components/whitepapper/TableInvesting";
 import IntroLbx from "@/components/whitepapper/IntroLbx";
 import ReservLbx from "@/components/ReservLbx";
 import ReservUSDC from "@/components/ReservUsdc";
-import HoldersRewards from "@/components/HoldersRewards";
 
 export default function WhitepaperPage() {
   return (
@@ -13,7 +12,6 @@ export default function WhitepaperPage() {
       <ReservLbx />
       <ReservUSDC />
       <TableInvesting />
-      <HoldersRewards />
 
       {/* Placeholder for future components */}
       <div className="mt-12">

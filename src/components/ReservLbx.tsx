@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-const WALLET_ADDRESS = "5ArPQSA9vM7sukJzsFdkEnUzG5NALCDDcEm6Li5VoZRS";
+const WALLET_ADDRESS = "CLobMTimtY5ExtHTqk1fJkZ1xCUpgLWWYFFMmWoLRGKe";
 const MINT_LBXO = "CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1";
 const RPC = "https://mainnet.helius-rpc.com/?api-key=44a7b170-0809-4848-b621-0f854499407a";
 

@@ -13,7 +13,7 @@ export default function TableInvesting() {
   ];
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const walletAddress = "5ArPQSA9vM7sukJzsFdkEnUzG5NALCDDcEm6Li5VoZRS";
+  const walletAddress = "CLobMTimtY5ExtHTqk1fJkZ1xCUpgLWWYFFMmWoLRGKe";
   const portfolioLink = `https://portfolio.jup.ag/portfolio/${walletAddress}`;
 
   return (

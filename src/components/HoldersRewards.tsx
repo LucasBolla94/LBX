@@ -34,7 +34,7 @@ export default function HoldersRewards() {
   return (
     <div className="w-full max-w-md mx-auto mt-12 bg-[var(--background)] border border-[var(--border)] rounded-xl p-6 shadow-md">
       <h2 className="text-xl sm:text-2xl font-bold text-center text-[var(--foreground)] mb-6">
-        🎁 Rewards Estimator
+        🎁 Stake Rewards Estimator
       </h2>
 
       {/* Input - $LBXO */}

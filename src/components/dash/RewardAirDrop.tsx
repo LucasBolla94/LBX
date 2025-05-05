@@ -5,8 +5,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { db } from '@/app/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import BtnWithdraw from '@/components/dash/BtnWithdraw';
-import RefLink from '@/components/dash/RefLink'; // Importa o RefLink
-import WithdrawTime from '@/components/dash/WithdrawTime'; // Importa o componente de contagem regressiva
+import RefLink from '@/components/dash/RefLink';
+import WithdrawTime from '@/components/dash/WithdrawTime';
 
 export default function RewardAirDrop() {
   const wallet = useWallet();
@@ -16,7 +16,7 @@ export default function RewardAirDrop() {
   const [loading, setLoading] = useState(true);
   const [payRequest, setPayRequest] = useState<boolean>(false);
   const [withdrawRequested, setWithdrawRequested] = useState<boolean>(false);
-  const [refferCode, setRefferCode] = useState<string>(''); // NOVO estado para guardar o refferCode
+  const [refferCode, setRefferCode] = useState<string>('');
 
   useEffect(() => {
     const fetchReferralData = async () => {
@@ -32,13 +32,13 @@ export default function RewardAirDrop() {
           const users = data?.newusers || 0;
           const userBalance = data?.balance || 0;
           const userPayRequest = data?.payrequest || false;
-          const code = data?.refferCode || ''; // PEGA o refferCode
+          const code = data?.refferCode || '';
 
           setNewUsers(users);
           setBalance(userBalance);
           setPayRequest(userPayRequest);
           setWithdrawRequested(userPayRequest);
-          setRefferCode(code); // SETA o refferCode
+          setRefferCode(code);
         } else {
           setNewUsers(0);
           setBalance(0);
@@ -57,7 +57,6 @@ export default function RewardAirDrop() {
         });
 
         setReward(totalAmount);
-
       } catch (error) {
         console.error('Error fetching referral data:', error);
       } finally {
@@ -73,9 +72,9 @@ export default function RewardAirDrop() {
   return (
     <section className="w-full max-w-md mx-auto bg-[var(--background)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 flex flex-col items-center shadow-lg">
       <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--foreground)] mb-6">
-        🎁  Rewards
+        🎁 Rewards
       </h2>
-  
+
       {loading ? (
         <p className="text-[var(--foreground)] animate-pulse text-base sm:text-lg">Loading...</p>
       ) : (
@@ -84,39 +83,43 @@ export default function RewardAirDrop() {
             New Users Referred:
           </p>
           <p className="text-[var(--foreground)] text-3xl sm:text-4xl font-bold">{newUsers}</p>
-  
+
           <div className="my-6 w-full h-px bg-[var(--border)]" />
-  
+
           <p className="text-[var(--foreground)]/70 text-base sm:text-lg mb-2 text-center">
             Total Already Withdrawn
           </p>
           <p className="text-[var(--foreground)] text-4xl sm:text-5xl font-extrabold text-center">
             {reward.toLocaleString()} $LBXO
           </p>
-  
+
           <div className="mt-6" />
-  
+
           <p className="text-[var(--foreground)]/70 text-base sm:text-lg mb-2 text-center">
             Total Available to Withdraw:
           </p>
           <p className="text-[var(--foreground)] text-3xl sm:text-4xl font-bold text-center">
             {balance?.toLocaleString() || 0} $LBXO
           </p>
-  
+
           <p className="text-xs text-[var(--foreground)]/50 mt-6 mb-4 text-center">
             Rewards update automatically as new users join.
           </p>
-  
-          {/* Link de Referência */}
+
+          {/* Referral Link */}
           {refferCode && <RefLink refferCode={refferCode} />}
 
-          {/* Count to Withdraw */}
+          {/* Countdown */}
           <WithdrawTime />
 
-          {/* Botão Withdraw */}
+          {/* Withdraw Button and Warning */}
           <div className="flex flex-col items-center">
-            <BtnWithdraw reward={balance || 0} disabled={payRequest || (balance || 0) < 500} />
-  
+            <BtnWithdraw
+              reward={balance || 0}
+              disabled={payRequest || (balance || 0) < 500}
+              refCount={newUsers || 0}
+            />
+
             {withdrawRequested && (
               <div className="mt-4 text-[var(--foreground)] text-sm border border-[var(--border)] bg-[var(--background)]/50 rounded-xl px-4 py-2 shadow-md text-center">
                 🎉 Withdrawal Request Successful! We’ll process it soon.
@@ -127,4 +130,4 @@ export default function RewardAirDrop() {
       )}
     </section>
   );
-}  
+}
