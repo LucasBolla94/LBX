@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
+import Image from 'next/image';
+import { FaSyncAlt } from 'react-icons/fa';
 
 const LBX_MINT = 'CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1';
 const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
@@ -37,7 +39,7 @@ export default function Portfolio() {
 
         const data = await response.json();
 
-        if (data.result && data.result.value.length > 0) {
+        if (data.result?.value?.length > 0) {
           const tokenAccount = data.result.value[0];
           const uiAmount = tokenAccount.account.data.parsed.info.tokenAmount.uiAmount || 0;
           setBalance(uiAmount);
@@ -63,11 +65,7 @@ export default function Portfolio() {
         const amount = 1 * 10 ** 9;
         const url = `https://lite-api.jup.ag/swap/v1/quote?inputMint=${LBX_MINT}&outputMint=${USDC_MINT}&amount=${amount}&slippageBps=50`;
         const res = await fetch(url);
-
-        if (!res.ok) {
-          console.error('Erro na resposta da API:', await res.text());
-          return;
-        }
+        if (!res.ok) return;
 
         const data = await res.json();
         const usdcValue = Number(data.outAmount) / 10 ** 6;
@@ -87,41 +85,49 @@ export default function Portfolio() {
   const portfolioValue = price !== null ? balance * price : 0;
 
   return (
-    <section className="w-full max-w-4xl mx-auto p-6 sm:p-8 bg-[var(--background)] rounded-3xl shadow-lg border border-[var(--border)] flex flex-col gap-6">
-      <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--foreground)]">
-        📈 Your Portfolio
-      </h2>
-  
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-10 sm:gap-8">
-        {/* Balance */}
-        <div className="flex flex-col items-center text-center">
-          <p className="text-base sm:text-lg text-[var(--foreground)]/70">Your Balance</p>
+    <section className="w-full max-w-4xl mx-auto p-6 sm:p-10 bg-[var(--background)] border border-[var(--border)] rounded-3xl shadow-xl">
+      {/* Header */}
+      <div className="flex flex-col items-center justify-center gap-4 text-center mb-10">
+        <Image src="/shield.png" alt="$LBXO Logo" width={60} height={60} />
+        <h1 className="text-2xl sm:text-3xl font-bold">Your LBXO Portfolio</h1>
+        <p className="text-sm sm:text-base text-[var(--foreground)]/70 max-w-xl">
+          Track your total $LBXO balance and its current value in USDC. 
+          Updated live every 30 seconds based on Jupiter’s market price.
+        </p>
+      </div>
+
+      {/* Data */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10 text-center">
+        {/* LBXO Balance */}
+        <div className="bg-[var(--border)]/10 border border-[var(--border)] rounded-xl p-6">
+          <p className="text-sm sm:text-base mb-2 text-[var(--foreground)]/70">Token Balance</p>
           {loadingBalance ? (
-            <p className="text-[var(--foreground)] text-3xl font-bold animate-pulse">Loading...</p>
+            <p className="text-3xl font-bold animate-pulse">Loading...</p>
           ) : (
-            <p className="text-3xl sm:text-4xl font-extrabold text-[var(--foreground)]">
-              {balance.toLocaleString()}
-              <span className="text-[var(--foreground)]/70 text-lg ml-1">$LBXO</span>
+            <p className="text-3xl font-extrabold">
+              {balance.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-base font-medium">$LBXO</span>
             </p>
           )}
         </div>
-  
-        {/* Value */}
-        <div className="flex flex-col items-center text-center">
-          <p className="text-base sm:text-lg text-[var(--foreground)]/70">Value in USDC</p>
+
+        {/* USDC Value */}
+        <div className="bg-[var(--border)]/10 border border-[var(--border)] rounded-xl p-6">
+          <p className="text-sm sm:text-base mb-2 text-[var(--foreground)]/70">Estimated USDC Value</p>
           {loadingPrice || loadingBalance ? (
-            <p className="text-[var(--foreground)] text-3xl font-bold animate-pulse">Loading...</p>
+            <p className="text-3xl font-bold animate-pulse">Loading...</p>
           ) : (
-            <p className="text-3xl sm:text-4xl font-extrabold text-[var(--foreground)]">
+            <p className="text-3xl font-extrabold text-green-500">
               ${portfolioValue.toFixed(2)}
             </p>
           )}
         </div>
       </div>
-  
-      <p className="text-xs text-center text-[var(--foreground)]/50 mt-2">
-        Data updates automatically every 30 seconds
-      </p>
+
+      {/* Footer */}
+      <div className="mt-6 flex justify-center items-center text-xs sm:text-sm text-[var(--foreground)]/50 gap-2">
+        <FaSyncAlt className="animate-spin-slow" />
+        Data refreshes every 30 seconds automatically
+      </div>
     </section>
   );
 }

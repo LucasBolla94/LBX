@@ -1,27 +1,40 @@
 'use client';
 
 import React from 'react';
-import Holders from './Holders'; // Importa o novo componente
+import Holders from './Holders';
+import { FaChartPie, FaLock, FaLeaf, FaUsers } from 'react-icons/fa';
 
 export default function StatsSection() {
   return (
-    <section className="bg-[var(--background)] py-12 px-6 md:px-20">
-      <div className="bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-lg p-6 md:p-10 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-[var(--foreground)]">
-        <div>
-          <p className="font-semibold text-lg text-[var(--foreground)]">50M. $LBXO</p>
-          <p className="text-sm mt-1 text-[var(--foreground)]/70">Total Supply</p>
+    <section className="bg-[var(--background)] py-12 px-4 sm:px-6 lg:px-20">
+      <div className="max-w-5xl mx-auto bg-[var(--background)] border border-[var(--border)] rounded-3xl shadow-lg p-6 sm:p-10 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-[var(--foreground)]">
+        
+        {/* Total Supply */}
+        <div className="flex flex-col items-center">
+          <FaChartPie className="text-2xl sm:text-3xl mb-2 text-purple-500" />
+          <p className="font-bold text-lg sm:text-xl">50M $LBXO</p>
+          <p className="text-sm text-[var(--foreground)]/70">Total Supply</p>
         </div>
-        <div>
-          <p className="font-semibold text-lg text-[var(--foreground)]">Available</p>
-          <p className="text-sm mt-1 text-[var(--foreground)]/70">Stake</p>
+
+        {/* Stake */}
+        <div className="flex flex-col items-center">
+          <FaLeaf className="text-2xl sm:text-3xl mb-2 text-green-500" />
+          <p className="font-bold text-lg sm:text-xl">Available</p>
+          <p className="text-sm text-[var(--foreground)]/70">Staking Program</p>
         </div>
-        <div>
+
+        {/* Holders */}
+        <div className="flex flex-col items-center">
+          <FaUsers className="text-2xl sm:text-3xl mb-2 text-yellow-500" />
           <Holders />
-          <p className="text-sm mt-1 text-[var(--foreground)]/70">Holders</p>
+          <p className="text-sm text-[var(--foreground)]/70">Current Holders</p>
         </div>
-        <div>
-          <p className="font-semibold text-lg text-[var(--foreground)]">Unavailable</p>
-          <p className="text-sm mt-1 text-[var(--foreground)]/70">Farm</p>
+
+        {/* Farm */}
+        <div className="flex flex-col items-center">
+          <FaLock className="text-2xl sm:text-3xl mb-2 text-red-500" />
+          <p className="font-bold text-lg sm:text-xl">Unavailable</p>
+          <p className="text-sm text-[var(--foreground)]/70">Farming Locked</p>
         </div>
       </div>
     </section>

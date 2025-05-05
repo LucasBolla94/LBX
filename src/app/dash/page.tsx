@@ -73,16 +73,16 @@ export default function DashPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-[var(--background)] text-[var(--foreground)]">
-        Loading...
+      <div className="flex justify-center items-center h-screen bg-[var(--background)] text-[var(--foreground)] text-xl animate-pulse">
+        Loading your dashboard...
       </div>
     );
   }
 
   if (!wallet.connected) {
     return (
-      <div className="flex justify-center items-center h-screen bg-[var(--background)] text-[var(--foreground)]">
-        Please connect your wallet.
+      <div className="flex justify-center items-center h-screen bg-[var(--background)] text-[var(--foreground)] text-lg">
+        Please connect your wallet to access the dashboard.
       </div>
     );
   }
@@ -93,37 +93,37 @@ export default function DashPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 sm:px-6 py-10">
-      {/* Cabeçalho do Painel */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-[var(--foreground)]">
-          🧑‍💻 LBXO Dashboard
-        </h1>
+      {/* Header */}
+      <header className="text-center mb-12">
+        <h1 className="text-3xl sm:text-4xl font-bold">📊 LBXO Dashboard</h1>
         <p className="mt-2 text-sm sm:text-base text-[var(--foreground)]/70">
-          Manage your portfolio, rewards, and community votes.
+          Manage your portfolio, referral rewards, and participate in governance.
         </p>
-      </div>
-  
-      {/* Conteúdo principal */}
-      <div className="flex flex-col gap-10 items-center w-full">
-        
+      </header>
+
+      {/* Layout Grid */}
+      <main className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto px-2 sm:px-4">
         {/* Portfolio */}
-        <div className="w-full max-w-4xl px-2 sm:px-4">
+        <div className="w-full">
           <Portfolio />
         </div>
-  
-        {/* Recompensas de Referência */}
-        <div className="w-full max-w-4xl px-2 sm:px-4">
+
+        {/* Rewards */}
+        <div className="w-full">
           <RewardAirDrop />
         </div>
-  
-        {/* Seção de Votação */}
-        <div className="w-full max-w-7xl px-2 sm:px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold text-[var(--foreground)] mb-6">
-            📢 Community Votes
-          </h2>
+
+        {/* Community Voting - full width */}
+        <div className="col-span-1 lg:col-span-2 mt-4">
+          <div className="mb-6 text-center lg:text-left">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">🗳️ Community Votes</h2>
+            <p className="text-sm sm:text-base text-[var(--foreground)]/70">
+              Participate in LBXO decisions through token-weighted governance.
+            </p>
+          </div>
           <PoolVote />
         </div>
-      </div>
+      </main>
     </div>
   );
-}  
+}

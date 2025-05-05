@@ -7,6 +7,7 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import BtnWithdraw from '@/components/dash/BtnWithdraw';
 import RefLink from '@/components/dash/RefLink';
 import WithdrawTime from '@/components/dash/WithdrawTime';
+import { FaUsers, FaGift, FaCoins, FaCheckCircle } from 'react-icons/fa';
 
 export default function RewardAirDrop() {
   const wallet = useWallet();
@@ -70,40 +71,46 @@ export default function RewardAirDrop() {
   }, [wallet.connected, wallet.publicKey]);
 
   return (
-    <section className="w-full max-w-md mx-auto bg-[var(--background)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 flex flex-col items-center shadow-lg">
-      <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--foreground)] mb-6">
-        🎁 Rewards
+    <section className="w-full max-w-xl mx-auto bg-[var(--background)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-lg">
+      <h2 className="text-2xl sm:text-3xl font-bold text-center text-[var(--foreground)] mb-8 flex items-center justify-center gap-2">
+        <FaGift className="text-pink-500" /> Referral Rewards
       </h2>
 
       {loading ? (
-        <p className="text-[var(--foreground)] animate-pulse text-base sm:text-lg">Loading...</p>
+        <p className="text-[var(--foreground)] animate-pulse text-center text-base sm:text-lg">
+          Loading your rewards...
+        </p>
       ) : (
         <>
-          <p className="text-[var(--foreground)]/70 text-base sm:text-lg mb-2 text-center">
-            New Users Referred:
-          </p>
-          <p className="text-[var(--foreground)] text-3xl sm:text-4xl font-bold">{newUsers}</p>
+          {/* Referred Users */}
+          <div className="flex flex-col items-center text-center mb-6">
+            <FaUsers className="text-blue-500 text-2xl mb-1" />
+            <p className="text-sm sm:text-base text-[var(--foreground)]/70">New Users Referred</p>
+            <p className="text-3xl sm:text-4xl font-bold text-[var(--foreground)]">
+              {newUsers}
+            </p>
+          </div>
 
-          <div className="my-6 w-full h-px bg-[var(--border)]" />
+          {/* Withdrawn Total */}
+          <div className="flex flex-col items-center text-center mb-6">
+            <FaCoins className="text-yellow-500 text-2xl mb-1" />
+            <p className="text-sm sm:text-base text-[var(--foreground)]/70">Total Already Withdrawn</p>
+            <p className="text-4xl sm:text-5xl font-extrabold text-[var(--foreground)]">
+              {reward.toLocaleString()} $LBXO
+            </p>
+          </div>
 
-          <p className="text-[var(--foreground)]/70 text-base sm:text-lg mb-2 text-center">
-            Total Already Withdrawn
-          </p>
-          <p className="text-[var(--foreground)] text-4xl sm:text-5xl font-extrabold text-center">
-            {reward.toLocaleString()} $LBXO
-          </p>
+          {/* Withdrawable */}
+          <div className="flex flex-col items-center text-center mb-6">
+            <FaCoins className="text-green-500 text-2xl mb-1" />
+            <p className="text-sm sm:text-base text-[var(--foreground)]/70">Available to Withdraw</p>
+            <p className="text-3xl sm:text-4xl font-bold text-[var(--foreground)]">
+              {balance?.toLocaleString() || 0} $LBXO
+            </p>
+          </div>
 
-          <div className="mt-6" />
-
-          <p className="text-[var(--foreground)]/70 text-base sm:text-lg mb-2 text-center">
-            Total Available to Withdraw:
-          </p>
-          <p className="text-[var(--foreground)] text-3xl sm:text-4xl font-bold text-center">
-            {balance?.toLocaleString() || 0} $LBXO
-          </p>
-
-          <p className="text-xs text-[var(--foreground)]/50 mt-6 mb-4 text-center">
-            Rewards update automatically as new users join.
+          <p className="text-xs text-[var(--foreground)]/50 text-center mb-4">
+            Rewards are updated automatically as new users join your referral link.
           </p>
 
           {/* Referral Link */}
@@ -112,8 +119,8 @@ export default function RewardAirDrop() {
           {/* Countdown */}
           <WithdrawTime />
 
-          {/* Withdraw Button and Warning */}
-          <div className="flex flex-col items-center">
+          {/* Withdraw Button and Confirmation */}
+          <div className="flex flex-col items-center mt-6 w-full">
             <BtnWithdraw
               reward={balance || 0}
               disabled={payRequest || (balance || 0) < 500}
@@ -121,8 +128,9 @@ export default function RewardAirDrop() {
             />
 
             {withdrawRequested && (
-              <div className="mt-4 text-[var(--foreground)] text-sm border border-[var(--border)] bg-[var(--background)]/50 rounded-xl px-4 py-2 shadow-md text-center">
-                🎉 Withdrawal Request Successful! We’ll process it soon.
+              <div className="mt-4 text-[var(--foreground)] text-sm border border-[var(--border)] bg-[var(--background)]/50 rounded-xl px-4 py-3 shadow-md text-center flex items-center gap-2">
+                <FaCheckCircle className="text-green-500" />
+                Withdrawal request received. We will process it shortly.
               </div>
             )}
           </div>
