@@ -1,7 +1,10 @@
 import TableInvesting from "@/components/whitepapper/TableInvesting";
 import IntroLbx from "@/components/whitepapper/IntroLbx";
-import ReservLbx from "@/components/ReservLbx";
-import ReservUSDC from "@/components/ReservUsdc";
+import ReservLbx from "@/components/whitepapper/ReservLbx";
+import ReservUSDC from "@/components/whitepapper/ReservUsdc";
+import ReservExplain from "@/components/whitepapper/ReservExplain";
+import RevenueDistribution from "@/components/whitepapper/RevenueDistribution";
+import VoteExplain from "@/components/whitepapper/VoteExplain";
 
 export default function WhitepaperPage() {
   return (
@@ -9,6 +12,7 @@ export default function WhitepaperPage() {
       <IntroLbx />
 
       {/* Reserva entre a introdução e a alocação de capital */}
+      <ReservExplain />
       <ReservLbx />
       <ReservUSDC />
       <TableInvesting />
@@ -16,6 +20,8 @@ export default function WhitepaperPage() {
       {/* Placeholder for future components */}
       <div className="mt-12">
         {/* Example: <ProfitDistributionTable /> */}
+        <RevenueDistribution />
+        <VoteExplain />
       </div>
     </main>
   );
