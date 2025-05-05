@@ -49,6 +49,7 @@ export default function NavBar() {
         <Link href="/" className="hover:text-primary text-[var(--foreground)] transition">Home</Link>
         <Link href="/whitepaper" className="hover:text-primary text-[var(--foreground)] transition">Whitepaper</Link>
         <Link href="/promo" className="hover:text-primary text-[var(--foreground)] transition">Rewards</Link>
+        <Link href="/help" onClick={() => setMenuOpen(false)} className="hover:text-primary transition">Help</Link>
       </div>
 
       {/* Ações (botões + switch) */}
@@ -95,6 +96,7 @@ export default function NavBar() {
             <Link href="/" onClick={() => setMenuOpen(false)} className="hover:text-primary transition">Home</Link>
             <Link href="/whitepaper" onClick={() => setMenuOpen(false)} className="hover:text-primary transition">Whitepaper</Link>
             <Link href="/promo" onClick={() => setMenuOpen(false)} className="hover:text-primary transition">Rewards</Link>
+            <Link href="/help" onClick={() => setMenuOpen(false)} className="hover:text-primary transition">Help</Link>
           </motion.div>
         )}
       </AnimatePresence>
