@@ -6,6 +6,7 @@ import StatsSection from '@/components/StatsSection';
 import SwapForm from '@/components/SwapForm';
 import PriceLbx from '@/components/PriceLbx';
 import VisitCounter from '@/components/Count'; // ✅ Importação aqui
+import NewsHome from '@/components/NewsHome';
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       {/* Preço centralizado no topo */}
       <section className="w-full px-4 sm:px-6 lg:px-20 py-8 max-w-screen-xl mx-auto">
         <PriceLbx />
+        <NewsHome /> {/* ✅ Componente de notícias adicionado aqui */}
       </section>
 
       {/* Intro + Swap lado a lado no desktop, empilhados no mobile */}
