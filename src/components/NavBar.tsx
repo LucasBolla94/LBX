@@ -60,6 +60,7 @@ export default function NavBar() {
         <Link href="/whitepaper" className="hover:text-primary transition">Whitepaper</Link>
         <Link href="/promo" className="hover:text-primary transition">Rewards</Link>
         <Link href="/help" className="hover:text-primary transition">Help</Link>
+        <Link href="/contact" className="hover:text-primary transition">Contact</Link>
       </div>
 
       {/* Right Actions */}
@@ -103,6 +104,7 @@ export default function NavBar() {
             <Link href="/whitepaper" onClick={toggleMenu} className="hover:text-primary transition">Whitepaper</Link>
             <Link href="/promo" onClick={toggleMenu} className="hover:text-primary transition">Rewards</Link>
             <Link href="/help" onClick={toggleMenu} className="hover:text-primary transition">Help</Link>
+            <Link href="/contact" onClick={toggleMenu} className="hover:text-primary transition">Contact</Link>
           </motion.div>
         )}
       </AnimatePresence>
