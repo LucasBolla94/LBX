@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     const { data, error } = await resend.emails.send({
       from: 'Contato LBX <noreply@lbxgroup.online>',
-      to: 'lucasbolla.uk@gmail.com',
+      to: 'lucasbolla.work@gmail.com',
       subject,
       react: EmailTemplate({
         name,
