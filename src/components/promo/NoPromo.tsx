@@ -16,7 +16,7 @@ export default function NoPromo() {
       </p>
 
       <p className="text-base sm:text-lg text-[var(--foreground)]/80 leading-relaxed mb-6">
-        Stay tuned through our official channels so you don't miss any future updates or opportunities to earn rewards.
+        Stay tuned through our official channels so you don&apos;t miss any future updates or opportunities to earn rewards.
       </p>
 
       {/* Links para canais de comunicação */}
