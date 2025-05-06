@@ -1,6 +1,7 @@
 'use client';
 
-import { FaTelegramPlane, FaInstagram, FaTwitter, FaTiktok } from 'react-icons/fa';
+import { FaTelegramPlane, FaInstagram, FaTiktok } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6'; // ✅ Novo ícone do X (Twitter)
 
 export default function Footer() {
   return (
@@ -19,8 +20,8 @@ export default function Footer() {
           <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <FaInstagram className="hover:text-pink-500 transition-colors" />
           </a>
-          <a href="https://x.com/lbxone" target="_blank" rel="noopener noreferrer" aria-label="Twitter/X">
-            <FaTwitter className="hover:text-sky-400 transition-colors" />
+          <a href="https://x.com/lbxone" target="_blank" rel="noopener noreferrer" aria-label="X">
+            <FaXTwitter className="hover:text-sky-400 transition-colors" />
           </a>
           <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
             <FaTiktok className="hover:text-white transition-colors" />
