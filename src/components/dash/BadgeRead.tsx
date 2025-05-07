@@ -39,7 +39,6 @@ const badges: Badge[] = [
 export default function BadgeRead({ user }: Props) {
   const { level, mod = false, admin = false } = user
 
-  // Debug
   useEffect(() => {
     console.log('BadgeRead user →', user)
   }, [user])
@@ -82,10 +81,15 @@ export default function BadgeRead({ user }: Props) {
     return <div className="text-sm text-[var(--foreground)]/60">Unranked</div>
   }
 
-  const range = normalBadge.max - normalBadge.min
-  const progress = Math.max(0, Math.min(level - normalBadge.min, range))
-  const starsCount = range > 0 ? Math.floor((progress / range) * 5) : 0
-  const stars = Math.min(5, starsCount)
+  // Divide o intervalo [min, max] em 5 partes iguais
+  const { min, max, starColor } = normalBadge
+  const span = max - min
+  const segment = span / 5
+  const offset = level - min
+  // Calcula número de estrelas de 1 a 5
+  const stars = span > 0
+    ? Math.min(5, Math.max(1, Math.floor(offset / segment) + 1))
+    : 0
 
   return (
     <div className="flex flex-col items-center gap-1">
@@ -97,7 +101,7 @@ export default function BadgeRead({ user }: Props) {
           {Array.from({ length: stars }).map((_, i) => (
             <FaStar
               key={i}
-              style={{ color: normalBadge.starColor === 'purple' ? 'purple' : 'gold' }}
+              style={{ color: starColor === 'purple' ? 'purple' : 'gold' }}
             />
           ))}
         </div>
