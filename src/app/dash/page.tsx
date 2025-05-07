@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, type JSX } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useRouter } from 'next/navigation'
 import { FaChevronDown, FaChevronUp, FaLock } from 'react-icons/fa'
 import Perfil from '@/components/dash/UserDetails'
 import Register from '@/components/dash/Register'
 import BadgeTable from '@/components/dash/BadgeTable'
+import RegisterWarning from '@/components/dash/RegisterWarning'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/app/lib/firebase'
 import { PublicKey } from '@solana/web3.js'
@@ -14,7 +15,6 @@ import { PublicKey } from '@solana/web3.js'
 const TOKEN_MINT = new PublicKey('CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1')
 const RPC_URL = 'https://mainnet.helius-rpc.com/?api-key=5bf3b96d-29b1-4443-a8ab-3739b20c2bea'
 
-// ✅ Tipagem correta do perfil de usuário
 interface UserData {
   nick: string
   level: number
@@ -30,12 +30,19 @@ interface UserData {
   }
 }
 
+interface SectionItem {
+  id: string
+  title: string | JSX.Element
+  locked: boolean
+  content: JSX.Element
+}
+
 export default function DashV2Page() {
   const wallet = useWallet()
   const router = useRouter()
 
-  const [userBalance, setUserBalance] = useState<number>(0)
-  const [minRequired, setMinRequired] = useState<number>(100)
+  const [userBalance, setUserBalance] = useState(0)
+  const [minRequired, setMinRequired] = useState(100)
   const [userData, setUserData] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
   const [openSection, setOpenSection] = useState<string | null>(null)
@@ -44,19 +51,22 @@ export default function DashV2Page() {
     setOpenSection(openSection === id ? null : id)
   }
 
+  const hasAccess = wallet.connected && userBalance >= minRequired
+  const shouldShowRegister = hasAccess && !userData
+
   useEffect(() => {
-    const checkAccess = async () => {
+    const fetchData = async () => {
       if (!wallet.connected || !wallet.publicKey) {
         router.push('/')
         return
       }
 
       try {
-        const snap = await getDoc(doc(db, 'config', 'min-dash'))
-        const value = snap.exists() ? Number(snap.data().value) : 100
+        const configSnap = await getDoc(doc(db, 'config', 'min-dash'))
+        const value = configSnap.exists() ? Number(configSnap.data().value) : 100
         setMinRequired(value)
 
-        const response = await fetch(RPC_URL, {
+        const rpcRes = await fetch(RPC_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -71,41 +81,29 @@ export default function DashV2Page() {
           }),
         })
 
-        const data = await response.json()
-        let balance = 0
+        const rpcData = await rpcRes.json()
+        const tokenAccounts = rpcData?.result?.value
+        const amount = tokenAccounts?.[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0
 
-        if (data.result && data.result.value.length > 0) {
-          const tokenAccount = data.result.value[0]
-          const uiAmount = tokenAccount.account.data.parsed.info.tokenAmount.uiAmount
-          balance = Number(uiAmount)
-        }
+        setUserBalance(Number(amount))
 
-        setUserBalance(balance)
-
-        if (balance < value) {
+        if (amount < value) {
           router.push('/')
           return
         }
 
         const userSnap = await getDoc(doc(db, 'users', wallet.publicKey.toBase58()))
-        if (userSnap.exists()) {
-          setUserData(userSnap.data() as UserData)
-        } else {
-          setUserData(null)
-        }
+        setUserData(userSnap.exists() ? (userSnap.data() as UserData) : null)
 
-      } catch (error) {
-        console.error('Erro ao checar acesso ao dashboard:', error)
+      } catch {
         router.push('/')
       } finally {
         setLoading(false)
       }
     }
 
-    checkAccess()
+    fetchData()
   }, [wallet.connected, wallet.publicKey, router])
-
-  const hasAccess = wallet.connected && userBalance >= minRequired
 
   if (loading) {
     return (
@@ -115,7 +113,18 @@ export default function DashV2Page() {
     )
   }
 
-  const sections = [
+  const sections: SectionItem[] = [
+    shouldShowRegister && {
+      id: 'register',
+      title: '✨ Click here to create your LBXO profile',
+      locked: false,
+      content: (
+        <div className="space-y-4">
+          <RegisterWarning />
+          <Register />
+        </div>
+      ),
+    },
     {
       id: 'rewards',
       title: 'My Rewards',
@@ -153,23 +162,18 @@ export default function DashV2Page() {
       locked: false,
       content: <BadgeTable />,
     },
-  ]
+  ].filter(Boolean) as SectionItem[]
 
   return (
     <main className="p-4 sm:p-6 max-w-screen-md mx-auto text-[var(--foreground)]">
       <section className="mb-8">
-        {hasAccess ? (
-          userData ? <Perfil user={userData} /> : <p>Loading profile...</p>
-        ) : (
-          <Register />
+        {hasAccess && userData && <Perfil user={userData} />}
+        {!hasAccess && (
+          <div className="text-center text-sm text-[var(--foreground)]/60">
+            Connect your wallet and hold at least <strong>{minRequired} LBXO</strong> to access the dashboard.
+          </div>
         )}
       </section>
-
-      {!hasAccess && (
-        <div className="mb-4 text-sm text-center text-[var(--foreground)]/60">
-          Connect your wallet and hold at least <strong>{minRequired} LBXO</strong> to access the dashboard.
-        </div>
-      )}
 
       <div className="space-y-4">
         {sections.map(({ id, title, locked, content }) => {
@@ -196,11 +200,11 @@ export default function DashV2Page() {
 
               <div
                 className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                  isOpen && !locked ? 'max-h-[600px] p-4' : 'max-h-0 p-0'
+                  isOpen && !locked ? 'max-h-[700px] p-4' : 'max-h-0 p-0'
                 }`}
               >
                 {!locked && isOpen && (
-                  <div className="text-sm max-h-[500px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[var(--border)] scrollbar-track-transparent">
+                  <div className="text-sm max-h-[600px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[var(--border)] scrollbar-track-transparent">
                     {content}
                   </div>
                 )}
