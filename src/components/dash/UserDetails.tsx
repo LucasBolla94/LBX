@@ -1,4 +1,3 @@
-// components/UserDetails.tsx
 'use client'
 
 import {
@@ -14,10 +13,9 @@ import BadgeRead from './BadgeRead'
 import LbxoBalance from './LbxoBalance'
 
 function normalizeUrl(url: string): string {
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    return `https://${url}`
-  }
-  return url
+  return url.startsWith('http://') || url.startsWith('https://')
+    ? url
+    : `https://${url}`
 }
 
 type Props = {
@@ -53,16 +51,16 @@ export default function UserDetails({ user }: Props) {
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-md p-6 space-y-6 transition-all duration-300">
-      {/* Avatar + Nick */}
+      {/* Avatar + Nickname */}
       <div className="flex flex-col sm:flex-row items-center gap-4">
         {user['perfil-img'] && !imgError ? (
-          <div className="relative w-24 h-24">
+          <div className="w-24 h-24 relative">
             <Image
               src={user['perfil-img']}
               alt={`${user.nick} avatar`}
               width={96}
               height={96}
-              className="rounded-full border border-[var(--border)] object-cover"
+              className="rounded-full border border-[var(--border)] object-cover w-full h-full max-w-[96px] aspect-square"
               onError={() => setImgError(true)}
               priority
             />
@@ -79,20 +77,17 @@ export default function UserDetails({ user }: Props) {
         </div>
       </div>
 
-      {/* Badge + Balance */}
+      {/* Badge + Date + Balance */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
         <InfoCard
           label={
             <div className="flex flex-col items-center gap-1">
-              {/* BadgeRead já exibe badge e estrelas */}
               <BadgeRead user={user} />
             </div>
           }
           value=""
         />
-
         <InfoCard label="Holder Since" value={formattedDate} />
-
         <InfoCard
           label={
             <span className="flex items-center justify-center gap-1">
@@ -134,7 +129,15 @@ export default function UserDetails({ user }: Props) {
   )
 }
 
-function InfoCard({ label, value }: { label: React.ReactNode; value: React.ReactNode }) {
+// COMPONENTES AUXILIARES
+
+function InfoCard({
+  label,
+  value,
+}: {
+  label: React.ReactNode
+  value: React.ReactNode
+}) {
   return (
     <div className="bg-[var(--border)]/10 rounded-md p-4 shadow-sm hover:shadow transition text-[var(--foreground)]">
       <div className="text-xs text-[var(--foreground)]/60 mb-1">{label}</div>
