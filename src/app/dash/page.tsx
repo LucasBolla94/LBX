@@ -5,9 +5,9 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/navigation';
 import { PublicKey } from '@solana/web3.js';
 import LoadPage from '@/components/LoadPage';
-import Portfolio from '@/components/dash/Portfolio';
-import RewardAirDrop from '@/components/dash/RewardAirDrop';
-import PoolVote from '@/components/dash/PoolVote';
+import Portfolio from '@/components/olddash/Portfolio';
+import PoolVote from '@/components/olddash/PoolVote';
+import Register from '@/components/vip/Register';
 
 const MINT_LBXO = new PublicKey('CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1');
 const RPC = 'https://mainnet.helius-rpc.com/?api-key=44a7b170-0809-4848-b621-0f854499407a';
@@ -110,7 +110,7 @@ export default function DashPage() {
 
         {/* Rewards */}
         <div className="w-full">
-          <RewardAirDrop />
+          <Register />
         </div>
 
         {/* Community Voting - full width */}

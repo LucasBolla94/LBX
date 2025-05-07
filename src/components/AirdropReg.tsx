@@ -5,7 +5,7 @@ import { db } from "@/app/lib/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { useWallet } from "@solana/wallet-adapter-react";
-import RefLink from "@/components/dash/RefLink";
+import RefLink from "@/components/olddash/RefLink";
 
 export default function AirdropReg() {
   const { publicKey } = useWallet();

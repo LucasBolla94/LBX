@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { db } from '@/app/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import BtnWithdraw from '@/components/dash/BtnWithdraw';
-import RefLink from '@/components/dash/RefLink';
-import WithdrawTime from '@/components/dash/WithdrawTime';
+import BtnWithdraw from '@/components/olddash/BtnWithdraw';
+import RefLink from '@/components/olddash/RefLink';
+import WithdrawTime from '@/components/olddash/WithdrawTime';
 import { FaUsers, FaGift, FaCoins, FaCheckCircle } from 'react-icons/fa';
 
 export default function RewardAirDrop() {
