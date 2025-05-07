@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { useRouter } from 'next/navigation';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/app/lib/firebase'; // ajuste esse path conforme seu projeto
+import { FiLock } from 'react-icons/fi';
 
 const MINT_LBXO = new PublicKey('CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1');
 const RPC = 'https://mainnet.helius-rpc.com/?api-key=44a7b170-0809-4848-b621-0f854499407a';
@@ -13,13 +16,24 @@ export default function DashboardAccessButton({ minimal }: { minimal?: boolean }
   const router = useRouter();
 
   const [balance, setBalance] = useState<number>(0);
+  const [minRequired, setMinRequired] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const checkLBXOBalance = async () => {
-      if (!wallet.publicKey) return;
+    const fetchMinRequired = async () => {
+      const docRef = doc(db, 'config', 'min-dash');
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        setMinRequired(snap.data().value || 0);
+      }
+    };
 
-      setLoading(true);
+    fetchMinRequired();
+  }, []);
+
+  useEffect(() => {
+    const checkBalance = async () => {
+      if (!wallet.publicKey) return;
 
       try {
         const response = await fetch(RPC, {
@@ -37,19 +51,11 @@ export default function DashboardAccessButton({ minimal }: { minimal?: boolean }
           }),
         });
 
-        const data = await response.json();
-
-        if (data.result && data.result.value.length > 0) {
-          const tokenAccount = data.result.value[0];
-          const uiAmount = tokenAccount.account.data.parsed.info.tokenAmount.uiAmount;
-          console.log(`LBXO Balance detected: ${uiAmount}`);
-          setBalance(uiAmount);
-        } else {
-          console.log('No LBXO token account found for wallet.');
-          setBalance(0);
-        }
-      } catch (error) {
-        console.error('Error fetching LBXO balance:', error);
+        const json = await response.json();
+        const tokenAccounts = json?.result?.value;
+        const amount = tokenAccounts?.[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
+        setBalance(amount);
+      } catch {
         setBalance(0);
       } finally {
         setLoading(false);
@@ -57,12 +63,12 @@ export default function DashboardAccessButton({ minimal }: { minimal?: boolean }
     };
 
     if (wallet.connected) {
-      checkLBXOBalance();
+      checkBalance();
     }
   }, [wallet.connected, wallet.publicKey]);
 
   const handleClick = () => {
-    if (wallet.connected && balance >= 1_000) {
+    if (wallet.connected && balance >= minRequired) {
       router.push('/dash');
     }
   };
@@ -83,11 +89,11 @@ export default function DashboardAccessButton({ minimal }: { minimal?: boolean }
     );
   }
 
-  if (balance < 100) {
+  if (balance < minRequired) {
     return (
-      <div className="flex flex-col sm:flex-row items-center justify-center text-[var(--foreground)] text-sm sm:text-base gap-1 sm:gap-2 text-center">
-        <span>Need at least 100 LBXO to access the Dashboard</span>
-        <span className="text-lg">❓</span>
+      <div className="flex items-center justify-center gap-2 text-center text-sm sm:text-base text-[var(--foreground)]">
+        <FiLock className="text-xl" />
+        <span>You need at least {minRequired} LBXO to access the Dashboard</span>
       </div>
     );
   }
