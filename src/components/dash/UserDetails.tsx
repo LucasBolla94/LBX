@@ -1,3 +1,4 @@
+// components/UserDetails.tsx
 'use client'
 
 import {
@@ -24,8 +25,10 @@ type Props = {
     ['perfil-img']?: string
     nick: string
     level: number
-    balance: number
+    mod?: boolean
+    admin?: boolean
     dateStamp: string
+    balance?: number
     social: {
       discord?: string
       telegram?: string
@@ -47,17 +50,6 @@ export default function UserDetails({ user }: Props) {
 
   const formattedDate = new Date(user.dateStamp).toLocaleDateString()
   const formattedFullDate = new Date(user.dateStamp).toLocaleString()
-
-  const getStars = (level: number): number => {
-    if (level >= 500_000) return 6
-    if (level >= 180_000) return 5
-    if (level >= 80_000) return 4
-    if (level >= 30_000) return 3
-    if (level >= 10_000) return 2
-    return 1
-  }
-
-  const stars = getStars(user.level ?? 0)
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-md p-6 space-y-6 transition-all duration-300">
@@ -87,17 +79,13 @@ export default function UserDetails({ user }: Props) {
         </div>
       </div>
 
-      {/* Badge + Stars + Balance */}
+      {/* Badge + Balance */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
         <InfoCard
           label={
-            <div className="flex flex-col items-center justify-center gap-1">
-              <BadgeRead level={user.level} />
-              <div className="text-yellow-400 flex justify-center gap-0.5 text-sm mt-1">
-                {Array.from({ length: stars }).map((_, i) => (
-                  <span key={i}>★</span>
-                ))}
-              </div>
+            <div className="flex flex-col items-center gap-1">
+              {/* BadgeRead já exibe badge e estrelas */}
+              <BadgeRead user={user} />
             </div>
           }
           value=""
@@ -119,21 +107,21 @@ export default function UserDetails({ user }: Props) {
       <div className="space-y-1">
         <h3 className="text-sm font-semibold text-[var(--foreground)]/70">Social</h3>
         <div className="flex flex-wrap gap-4">
-          {user.social?.discord && (
+          {user.social.discord && (
             <SocialLink
               href={normalizeUrl(user.social.discord)}
               icon={<FaDiscord className="text-blue-400" />}
               label="Discord"
             />
           )}
-          {user.social?.telegram && (
+          {user.social.telegram && (
             <SocialLink
               href={normalizeUrl(user.social.telegram)}
               icon={<FaTelegramPlane className="text-sky-400" />}
               label="Telegram"
             />
           )}
-          {user.social?.x && (
+          {user.social.x && (
             <SocialLink
               href={normalizeUrl(user.social.x)}
               icon={<FaTwitter className="text-white" />}
@@ -146,7 +134,6 @@ export default function UserDetails({ user }: Props) {
   )
 }
 
-// InfoCard
 function InfoCard({ label, value }: { label: React.ReactNode; value: React.ReactNode }) {
   return (
     <div className="bg-[var(--border)]/10 rounded-md p-4 shadow-sm hover:shadow transition text-[var(--foreground)]">
@@ -156,7 +143,6 @@ function InfoCard({ label, value }: { label: React.ReactNode; value: React.React
   )
 }
 
-// SocialLink
 function SocialLink({
   href,
   icon,

@@ -1,3 +1,4 @@
+// ./src/components/dash/Register.tsx
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
@@ -5,25 +6,20 @@ import { db, storage } from '@/app/lib/firebase'
 import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { PublicKey } from '@solana/web3.js'
 import {
   FaDiscord,
   FaTelegramPlane,
   FaTwitter,
   FaUserAlt,
-  FaCoins,
   FaUserCircle,
 } from 'react-icons/fa'
+import Image from 'next/image'
 import UserDetails from './UserDetails'
 
-const LBX_MINT = new PublicKey('CQEPkT5RGWhEYdUFQpeshyxc4z3XXPVq74sehnPFAGu1')
-const RPC = 'https://mainnet.helius-rpc.com/?api-key=44a7b170-0809-4848-b621-0f854499407a'
-
-type UserDoc = {
+export type UserDoc = {
   ['perfil-img']: string
   nick: string
   level: number
-  balance: number
   dateStamp: string
   social: {
     discord?: string
@@ -35,7 +31,7 @@ type UserDoc = {
 export default function Register() {
   const wallet = useWallet()
   const inputFileRef = useRef<HTMLInputElement>(null)
-  const [balance, setBalance] = useState(0)
+
   const [formOpen, setFormOpen] = useState(false)
   const [form, setForm] = useState({
     nick: '',
@@ -49,31 +45,10 @@ export default function Register() {
 
   useEffect(() => {
     if (!wallet.connected || !wallet.publicKey) return
-    const pubkey = wallet.publicKey
+    const pubkey = wallet.publicKey.toBase58()
 
     ;(async () => {
-      try {
-        // Fetch on-chain balance
-        const res = await fetch(RPC, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0',
-            id: 1,
-            method: 'getTokenAccountsByOwner',
-            params: [pubkey.toBase58(), { mint: LBX_MINT.toBase58() }, { encoding: 'jsonParsed' }],
-          }),
-        })
-        const json = await res.json()
-        const amt = json.result?.value?.[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0
-        setBalance(amt)
-      } catch {
-        setBalance(0)
-      }
-
-      // Fetch existing user
-      const userRef = doc(db, 'users', pubkey.toBase58())
-      const snap = await getDoc(userRef)
+      const snap = await getDoc(doc(db, 'users', pubkey))
       if (snap.exists()) {
         setRegistered(true)
         setUserDoc(snap.data() as UserDoc)
@@ -98,8 +73,8 @@ export default function Register() {
   const handleSubmit = async () => {
     if (!wallet.connected || !wallet.publicKey) return
     const walletAddress = wallet.publicKey.toBase58()
-    let avatarUrl = ''
 
+    let avatarUrl = ''
     if (form.avatarFile) {
       try {
         const storageRef = ref(storage, `${walletAddress}/img`)
@@ -115,7 +90,6 @@ export default function Register() {
       ['perfil-img']: avatarUrl,
       nick: form.nick.trim(),
       level: 0,
-      balance,
       dateStamp: new Date().toISOString(),
       social: {
         discord: form.discord.trim(),
@@ -129,12 +103,10 @@ export default function Register() {
     setUserDoc(userPayload)
   }
 
-  // Renderiza detalhes se registrado (userDoc sempre definido quando registered === true)
-  if (registered) {
-    return <UserDetails user={userDoc!} />
+  if (registered && userDoc) {
+    return <UserDetails user={userDoc} />
   }
 
-  // Enquanto o formulário não está aberto
   if (!formOpen) {
     return (
       <div
@@ -146,22 +118,24 @@ export default function Register() {
     )
   }
 
-  // Formulário de registro
   return (
     <div className="w-full max-w-2xl mx-auto bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-lg p-6 space-y-6">
-      {/* Avatar upload */}
+      {/* Avatar */}
       <div className="flex flex-col items-center gap-2">
         <div
           onClick={() => inputFileRef.current?.click()}
           className="cursor-pointer relative group"
         >
           {form.avatarFile ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={URL.createObjectURL(form.avatarFile)}
-              alt="Preview"
-              className="w-24 h-24 rounded-full object-cover border border-[var(--border)]"
-            />
+            <div className="relative w-24 h-24 rounded-full overflow-hidden border border-[var(--border)]">
+              <Image
+                src={URL.createObjectURL(form.avatarFile)}
+                alt="Preview"
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
           ) : (
             <FaUserCircle className="w-24 h-24 text-[var(--foreground)]/40" />
           )}
@@ -199,7 +173,7 @@ export default function Register() {
         </p>
       </div>
 
-      {/* Social links */}
+      {/* Redes sociais */}
       {[
         { label: 'Discord', icon: <FaDiscord />, name: 'discord', placeholder: 'https://discord.com/...' },
         { label: 'Telegram', icon: <FaTelegramPlane />, name: 'telegram', placeholder: 'https://t.me/...' },
@@ -218,11 +192,6 @@ export default function Register() {
           />
         </div>
       ))}
-
-      {/* Balance */}
-      <div className="flex items-center gap-2 text-sm text-[var(--foreground)]/80 bg-[var(--border)]/10 rounded-md p-3">
-        <FaCoins className="text-yellow-400" /> You have: <strong>{balance.toLocaleString()} $LBXO</strong>
-      </div>
 
       {/* Submit */}
       <button

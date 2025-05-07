@@ -12,7 +12,7 @@ const RPC = 'https://mainnet.helius-rpc.com/?api-key=44a7b170-0809-4848-b621-0f8
 
 type Props = {
   user?: {
-    balance: number
+    balance?: number // ✅ agora é opcional
   }
 }
 
@@ -50,7 +50,7 @@ export default function LbxoBalance({ user }: Props) {
         setError(false)
 
         // Atualiza Firestore se necessário
-        if (user?.balance !== newBalance) {
+        if (user?.balance !== undefined && user.balance !== newBalance) {
           await updateDoc(doc(db, 'users', wallet.publicKey.toBase58()), {
             balance: newBalance,
           })
@@ -69,7 +69,7 @@ export default function LbxoBalance({ user }: Props) {
     }
 
     fetchBalance()
-  }, [wallet.connected, wallet.publicKey, user?.balance]) // ✅ dependência adicionada
+  }, [wallet.connected, wallet.publicKey, user?.balance])
 
   return (
     <div className="text-sm text-[var(--foreground)] bg-[var(--border)]/10 p-4 rounded-lg">
