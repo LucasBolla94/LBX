@@ -1,0 +1,101 @@
+[
+    {
+      "question": "What is a seed phrase and what is it used for?",
+      "options": [
+        "A promotional code to access exclusive dApps",
+        "A login key to access centralized exchanges",
+        "A sequence of words that allows access and recovery of your wallet",
+        "An address used to send tokens to other users"
+      ],
+      "answer": "A sequence of words that allows access and recovery of your wallet",
+      "explanation": "The seed phrase is a 12 or 24-word sequence that gives full access to your wallet. Anyone with it can restore and move your funds. It should never be shared."
+    },
+    {
+      "question": "Why should you never share your seed phrase with anyone?",
+      "options": [
+        "Because it expires after 24 hours",
+        "Because it can cause network slowdown",
+        "Because anyone with access to it can steal all your assets",
+        "Because it may invalidate your wallet address"
+      ],
+      "answer": "Because anyone with access to it can steal all your assets",
+      "explanation": "The seed phrase grants full control over your wallet. If someone knows it, they can restore your wallet on another device and transfer your funds. It\u2019s like giving away the keys to your vault."
+    },
+    {
+      "question": "What is the safest way to store your seed phrase?",
+      "options": [
+        "Save it on Google Drive with a password",
+        "Write it down on paper and store in a safe place",
+        "Send it to your personal email",
+        "Take a screenshot and keep it in your phone gallery"
+      ],
+      "answer": "Write it down on paper and store in a safe place",
+      "explanation": "The safest method is to write it down and store it in a location protected from moisture, fire, and unauthorized access. Digital storage is more vulnerable to hacking."
+    },
+    {
+      "question": "What should you do if you suspect a dApp is fake?",
+      "options": [
+        "Connect with an empty wallet to test",
+        "Connect and sign quickly to avoid errors",
+        "Ignore and never access the dApp",
+        "Send a small amount of token to test"
+      ],
+      "answer": "Ignore and never access the dApp",
+      "explanation": "You should never interact with suspicious dApps. Just connecting can allow dangerous permissions. Best practice is to avoid and report suspicious links."
+    },
+    {
+      "question": "Which site is official to check transactions and tokens on the Solana network?",
+      "options": [
+        "solana-wallet.io",
+        "solscan.io",
+        "solana-chaintracker.com",
+        "solbalance.net"
+      ],
+      "answer": "solscan.io",
+      "explanation": "Solscan.io is one of the official explorers for the Solana network. You can view balances, transactions, tokens, and contracts. The other domains are not reliable or are made up."
+    },
+    {
+      "question": "Is it safe to use your wallet on public Wi-Fi networks?",
+      "options": [
+        "Yes, if the site is secure",
+        "Yes, if using browser incognito mode",
+        "No, because public networks increase the risk of interception and attacks",
+        "Yes, if you disconnect your wallet after 5 minutes"
+      ],
+      "answer": "No, because public networks increase the risk of interception and attacks",
+      "explanation": "Using your wallet on public Wi-Fi is risky because hackers can intercept data or manipulate traffic. Use private and trusted networks when dealing with Web3."
+    },
+    {
+      "question": "How can you ensure that a swap site like Jupiter or Raydium is legitimate?",
+      "options": [
+        "By checking if the site has modern animations",
+        "By using links shared in Telegram groups",
+        "By looking for the official link on the project's Twitter or website",
+        "By testing with a small amount of SOL"
+      ],
+      "answer": "By looking for the official link on the project's Twitter or website",
+      "explanation": "Fake sites are common. Always access via links shared on verified project channels such as their Twitter or website. Never trust random links."
+    },
+    {
+      "question": "Why is it important to revoke access from old dApps?",
+      "options": [
+        "Because it uses more wallet memory",
+        "Because old dApps can act without your consent using permissions",
+        "Because it increases the number of tokens in your wallet",
+        "Because it prevents your wallet from disconnecting on its own"
+      ],
+      "answer": "Because old dApps can act without your consent using permissions",
+      "explanation": "When you connect to a dApp, it might get permissions to move or read tokens. If compromised, it could misuse those permissions later. Revoking is crucial for security."
+    },
+    {
+      "question": "What is the function of a hardware wallet?",
+      "options": [
+        "Automatically connect your wallet to new devices",
+        "Speed up transaction times",
+        "Store private keys offline, protecting from digital intrusions",
+        "Automatically generate NFTs after login"
+      ],
+      "answer": "Store private keys offline, protecting from digital intrusions",
+      "explanation": "Hardware wallets (like Ledger or Trezor) keep your private keys offline, safeguarding your funds even if your computer is hacked. It's an extra strong security layer."
+    }
+  ]
