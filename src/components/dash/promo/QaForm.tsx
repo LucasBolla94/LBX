@@ -10,21 +10,12 @@ import CountdownTimer from './CountdownTimer'
 import questions from './Questions.json'
 import Image from 'next/image'
 
-// 🕒 Tempo máximo de quiz (segundos)
 const TIMER_DURATION = 180
-
-// ✅ Mínimo de acertos para passar
 const MIN_CORRECT = 5
-
-// 🕒 Intervalo de bloqueio entre tentativas (milissegundos)
-const MAX_ATTEMPTS_INTERVAL = 30 * 60 * 1000 // 30 minutos
-
-// 🎁 Recompensas em $LBXO
+const MAX_ATTEMPTS_INTERVAL = 30 * 60 * 1000 // 30 min
 const REWARD_5 = 500
 const REWARD_6 = 750
 const REWARD_7 = 1000
-
-// 🚀 Recompensa em nível (level)
 const LEVEL_REWARD = 0.5
 
 interface Question {
@@ -47,6 +38,7 @@ export default function QaForm() {
   const [cooldown, setCooldown] = useState<string | null>(null)
   const [result, setResult] = useState<number | null>(null)
   const [rewardEarned, setRewardEarned] = useState<number>(0)
+  const [started, setStarted] = useState(false)
 
   const userId = publicKey?.toBase58()
 
@@ -85,12 +77,11 @@ export default function QaForm() {
   }, [publicKey, userId])
 
   useEffect(() => {
-    if (status !== 'ready' || result !== null) return
+    if (status !== 'ready' || result !== null || !started) return
     if (timeLeft <= 0) window.location.reload()
-
     const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000)
     return () => clearTimeout(timer)
-  }, [timeLeft, status, result])
+  }, [timeLeft, status, result, started])
 
   const handleCheck = () => {
     if (!selected) return
@@ -122,7 +113,6 @@ export default function QaForm() {
     const ref = doc(db, 'users', userId)
     const snap = await getDoc(ref)
     const data = snap.data() || {}
-
     const timestampKey = `qa-promo:${new Date().toISOString()}`
 
     await updateDoc(ref, {
@@ -163,6 +153,28 @@ export default function QaForm() {
       <div className="text-yellow-600 text-center font-medium">
         ⏳ You can try again {cooldown}
         <CountdownTimer />
+      </div>
+    )
+  }
+
+  // 🟢 INTRO BEFORE QUIZ START
+  if (!started) {
+    return (
+      <div className="p-6 max-w-xl mx-auto text-center rounded border shadow space-y-4"
+        style={{ background: 'var(--background)', color: 'var(--foreground)', borderColor: 'var(--border)' }}>
+        <FaShieldAlt className="text-4xl text-blue-500 mx-auto" />
+        <h1 className="text-2xl font-bold">Blockchain Security Quiz 🔐</h1>
+        <p className="text-sm text-gray-500">
+          This short quiz is designed to help beginners understand the basics of blockchain safety.
+          Answer the questions correctly and earn <strong>$LBXO</strong> as a reward!<br />
+          You must get at least 5 out of 7 questions right to pass. You have 3 minutes ⏱️.
+        </p>
+        <button
+          onClick={() => setStarted(true)}
+          className="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          ▶️ Start
+        </button>
       </div>
     )
   }
@@ -219,7 +231,7 @@ export default function QaForm() {
   return (
     <div className="p-4 max-w-xl mx-auto rounded shadow space-y-4"
       style={{ background: 'var(--background)', color: 'var(--foreground)', borderColor: 'var(--border)' }}>
-      
+
       <div className="text-sm text-right text-gray-600">
         ⏱️ Time left: <strong>{Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}</strong>
       </div>
