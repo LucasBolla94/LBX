@@ -7,6 +7,7 @@ import ReservUSDC from '@/components/whitepapper/ReservUsdc';
 import TableInvesting from '@/components/whitepapper/TableInvesting';
 import RevenueDistribution from '@/components/whitepapper/RevenueDistribution';
 import VoteExplain from '@/components/whitepapper/VoteExplain';
+import ReservSol from '@/components/whitepapper/ReservSol';
 
 export default function WhitepaperPage() {
   return (
@@ -22,6 +23,7 @@ export default function WhitepaperPage() {
           <ReservExplain />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ReservLbx />
+            <ReservSol />
             <ReservUSDC />
           </div>
         </section>
