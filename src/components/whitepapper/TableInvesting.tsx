@@ -8,12 +8,12 @@ import {
   FaExchangeAlt,
   FaRecycle,
   FaWallet,
-  FaSearchDollar,
+  /*FaSearchDollar,*/
 } from "react-icons/fa";
 
 export default function TableInvesting() {
-  const walletAddress = "CLobMTimtY5ExtHTqk1fJkZ1xCUpgLWWYFFMmWoLRGKe";
-  const portfolioLink = `https://portfolio.jup.ag/portfolio/${walletAddress}`;
+ /* const walletAddress = "CLobMTimtY5ExtHTqk1fJkZ1xCUpgLWWYFFMmWoLRGKe";
+  const portfolioLink = `https://portfolio.jup.ag/portfolio/${walletAddress}`;*/
 
   const rows = [
     {
@@ -58,7 +58,7 @@ export default function TableInvesting() {
 
   return (
     <section className="w-full px-4 mt-10">
-      {/* Wallet Info */}
+      {/* Wallet Info 
       <div className="max-w-3xl mx-auto mb-8 bg-[var(--background)] border border-[var(--border)] rounded-xl p-4 sm:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="text-sm sm:text-base text-[var(--foreground)] font-medium break-all">
           <span className="block sm:inline font-semibold">LBX Group Wallet:</span>{" "}
@@ -72,7 +72,7 @@ export default function TableInvesting() {
         >
           <FaSearchDollar /> View Portfolio
         </a>
-      </div>
+      </div>*/}
 
       {/* Title & Description */}
       <div className="max-w-3xl mx-auto text-center mb-6">
